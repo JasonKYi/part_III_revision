@@ -1,0 +1,1223 @@
+\documentclass[]{article}
+\usepackage{amsmath}
+\usepackage[bitstream-charter]{mathdesign}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+\hypersetup{
+  pdftitle={Functional Analysis},
+  pdfauthor={Kexing Ying},
+  colorlinks=true,
+  linkcolor=Maroon,
+  filecolor=Maroon,
+  citecolor=Maroon,
+  urlcolor=Maroon,
+  pdfcreator={LaTeX via pandoc}}
+
+\usepackage[margin = 1.5in]{geometry}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+
+\setlength\parindent{0pt} % no indentation for paragraphs
+\setlength{\parskip}{3pt} % add a little space between paragraphs
+
+\usepackage{tikz}
+\usepackage{physics}
+\usepackage{amsthm}
+\usepackage{mathtools}
+
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem*{remark}{Remark}
+
+\title{Functional Analysis}
+\author{Kexing Ying}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+  \noindent This note contains parts of the course \textit{Functional Analysis} taught by András Zsák for 
+  Part~III students at the University of Cambridge. I will omit the initial parts of the course 
+  reviewing linear operator theory and numerous Hahn-Banach theorems. I will also omit the proof of the 
+  Radon-Nikodym theorem. 
+\end{abstract}
+
+\tableofcontents
+
+\newpage
+\section{The Dual of \texorpdfstring{\(L_p\)}{Lp} and \texorpdfstring{\(C(K)\)}{C(K)}}
+
+We will always work in the measure space \((\Omega, \mathcal{F}, \mu)\). We recall the Radon-Nikodym 
+theorem and its related results.
+
+\begin{theorem}[Hahn decomposition]
+  Given a signed measure \(\nu : \mathcal{F} \to \mathbb{R}\), there exists a disjoint partition 
+  \(A, B \in \mathcal{F}\), \(A \sqcup B = \Omega\) such that for all \(S \subseteq A\), 
+  \(\nu(S) \geq 0\) and for all \(S \subseteq B\), \(\nu(S) \leq 0\).
+\end{theorem}
+
+\begin{corollary}[Hahn-Jordan decomposition of a signed measure]
+  Given a signed measure \(\nu\), there exists unique measures \(\nu^+, \nu^-\) such that for all 
+  \(S \in \mathcal{F}\), \(\nu(S) = \nu^+(S) - \nu^-(S)\).
+\end{corollary}
+
+\begin{theorem}[Radon-Nikodym]
+  Given \(\mu\) is \(\sigma\)-finite, \(\nu : \mathcal{F} \to \mathbb{C}\) is a complex measure 
+  such that \(\nu \ll \mu\), there exists a unique \(f \in L_1(\mu)\) such that for all 
+  \(S \in \mathcal{F}\), 
+  \[\nu(A) = \int_A f \dd \mu.\]
+\end{theorem}
+
+\begin{remark}
+  This \(f\) is said to be the Radon-Nikodym derivative of \(\nu\) with respect to \(\mu\) and we 
+  denote it by \(\dv*{\nu}{\mu}\).
+\end{remark}
+
+\begin{remark}
+  In the case \(\nu\) is not necessarily absolutely continuous with respect to \(\mu\), we can  
+  decompose \(\nu = \nu_1 + \nu_2\) where \(\nu_1, \nu_2\) are complex measures such that 
+  \(\nu_1 \ll \mu\) and \(\nu_2 \perp \mu\) (i.e. there exists some \(S \in \mathcal{F}\) such that 
+  \(\nu_2(S) = 0 = \mu(S^c)\)).
+\end{remark}
+
+\subsection{Dual of \texorpdfstring{\(L_p\)}{Lp}}
+
+Utilizing the Radon-Nikodym theorem, we in this section show that for all \(p \in [1, \infty)\), 
+\(L_p^*\) is isometrically isomorphic to \(L_q\) for \(p, q\) Hölder conjugates.
+
+The map we consider is 
+\[\phi : L_q \to L_p^* : g \mapsto \phi_g\]
+where we define \(\phi_g(f) := \int fg \dd \mu\). This map is well defined since 
+\(|\phi_g(f)| \le \|g\|_q\|f\|_p\) and so \(\|\phi_g\| \le \|g\|_q < \infty\). As \(\phi\) is 
+clearly linear, this furthermore shows that \(\phi\) is bounded.
+
+\begin{theorem}
+  For \(p \in (1, \infty)\), \(\phi\) is a isometric isomorphism between \(L_q\) and \(L_p^*\).
+  Furthermore, in the case that \(\mu\) is \(\sigma\)-finite, the same remains to hold for \(p = 1\).
+\end{theorem}
+\begin{proof}
+  We first consider the case \(p \in (1, \infty)\) and we show that \(\phi\) is isometric. 
+  
+  Let \(g \in L_q\), we have already shown that \(\|\phi_g\| \le \|g\|_q\). We now show the converse 
+  inequality. Define 
+  \[f = \begin{cases}
+    \frac{|g|^q}{g}, & g \neq 0,\\
+    0, & g = 0.
+  \end{cases}\]
+  It suffices to show \(|\phi_g(f)| / \|f\|_p\) achieves \(\|g\|_q\). Indeed,
+  \[\int |f^p| \dd \mu = \int |g|^{(q - 1)p} \dd \mu = \int |g|^q \dd \mu < \infty\]
+  and so \(f \in L_p\) and \(\|f\|_p^p = \|g\|_q^q\). Thus, 
+  \[|\phi_g(f)| = \int |g|^q \dd\mu = \|g\|_q^q = \|f\|_p^p,\]
+  implying 
+  \[\frac{|\phi_g(f)|}{\|f\|_p} = \|f\|_p^{p - 1} = \|g\|_q^{\frac{q(p - 1)}{p}} = \|g\|_q\]
+  as claimed.
+
+  We now show that \(\phi\) is surjective. We first consider the case that \(\mu\) is finite.
+
+  Fix \(\psi \in L_p^*\). Define 
+  \[\nu(A) = \psi(\mathbf{1}_A).\]
+  I claim that \(\nu\) is a complex measure. Indeed, 
+  \begin{itemize}
+    \item \(\nu(\varnothing) = \psi(0) = 0\), and
+    \item for \((A_n) \subseteq \mathcal{F}\) disjoint,
+    \begin{align*}
+      \left|\nu\left(\bigcup_n A_n\right) - \sum_{n = 1}^N \nu(A_n)\right| 
+      & = \left|\psi\left(\mathbf{1}_{\bigcup_n A_n} - \sum_{n = 1}^N \mathbf{1}_{A_n}\right)\right|\\
+      & \le \|\psi\| \left\|\mathbf{1}_{\bigcup_n A_n} - \sum_{n = 1}^N \mathbf{1}_{A_n}\right\|_p
+        = \|\psi\| \mu\left(\bigcup_{n = N}^\infty A_n\right)^{1 / p}
+    \end{align*}
+      which converges to \(0\) as \(N \to \infty\) implying \(\sigma\)-additivity.
+  \end{itemize}
+  Furthermore, it is clear that \(\nu \ll \mu\) and so by the Radon-Nikodym theorem, there exists 
+  a unique \(g \in L_1(\mu)\) such that for all \(S \in \mathcal{F}\), 
+  \[\psi(\mathbf{1}_S) = \nu(S) = \int_S g \dd \mu.\]
+  Thus, it follows that for any simple function \(f\), \(\int fg \dd \mu = \psi(f)\). 
+
+  Now approximating \(f \in L_\infty\) by simple functions \(f_n \uparrow f\), we have 
+  \[\psi(f) = \lim_{n \to \infty}\psi(f_n) 
+    = \lim_{n \to \infty} \int f_n g \dd \mu \stackrel{\text{MCT}}{=} \int fg \dd \mu.\]
+  With this, we would like to conclude by the density of \(L_\infty\) in \(L_p\) (this is what requires 
+  \(\mu\) to be finite). However to do so, we need to first check that \(g \in L_q\) and so \(\phi_g\) 
+  is in fact in \(L_p^\infty\). Let us check this now: 
+
+  For \(n \in \mathbb{N}\), let \(A_n = \{0 < |g| < n\}\) and 
+  \(f = \mathbf{1}_{A_n}|g|^q / g \in L_\infty \subseteq L_p\). 
+  Then, \[\int |g|^q \dd \mu = \int fg \dd \mu = \psi(f) \le \|\psi\| \|f\|_p = 
+    \|\psi\| \left(\int_{A_n} |g|^q \dd \mu\right)^{1 / p}.\] 
+  Thus, taking \(n \to \infty\), we have by the monotone convergence theorem 
+  \[\|\psi\| \ge \left(\int_{A_n} |g|^q \dd \mu\right)^{1 - 1 / p} = \|g\|_q\]
+  and so \(g \in L_q\) as required. With this, by the previous remark, we conclude that \(\phi_g = \psi\) 
+  for \(\mu\) finite case by leveraging the density of \(L_\infty\) in \(L_p\).
+
+  Before proving the general case, let us first introduce the following notations: given \(B \in \mathcal{F}\),
+  we denote \(\mathcal{F}_B = \{A \in \mathcal{F} \mid A \subseteq B\}\) and \(\mu_B = \mu|_B\) so 
+  \((\Omega, \mathcal{F}_B, \mu_B)\) is a measure space and \(L_p(\mu_B) \subseteq L_p(\mu)\). 
+  Furthermore, given \(\psi \in L_p(\mu)^*\), we denote \(\psi_B = \psi|_{L_p(\mu_B)}\) so 
+  \(\psi_B \in L_p(\mu_B)^*\) and \(\|\psi_B\| \le \|\psi\|\). We note the following claim:
+
+  \textit{Given \(B, C \in \mathcal{F}\) are disjoint, \(\|\psi_{B \cup C}\|^q = \|\psi_B\|^q + \|\psi_C\|^q\).}
+  \begin{proof}[Proof of claim]
+    Let \(f \in L_p(\mu_{B \cup C})\). Then,
+    \begin{align*}
+      |\psi_{B \cup C}(f)| & = |\psi_B(f|_B) + \psi_C(f|_C)|\\
+      & \le |\psi_B(f|_B)| + |\psi_C(f|_C)|\\
+      & \le \|\psi_B\|\|f|_B\|_p + \|\psi_C\|\|f|_C\|_p\\
+      & \stackrel{\text{Hölder}}{\le} (\|\psi_B\|^q + \|\psi_C\|^q)^{1 / q}(\|f|_B\|_p^p + \|f|_C\|_p^p)^{1 / p}\\
+      & = (\|\psi_B\|^q + \|\psi_C\|^q)^{1 / q}\|f\|_p
+    \end{align*}
+    implying \(\|\psi_{B \cup C}\|^q \le \|\psi_B\|^q + \|\psi_C\|^q\).
+
+    On the other hand, for the reverse direction, fix \(a, b \ge 0\) such that \(a^p + b^q = 1\) and 
+    \[a\|\psi_B\| + b\|\psi_C\| = (\|\psi_B\|^a + \|\psi_C\|^b)^{1 / q}.\]
+    Then, given \(f \in L_p(\mu_B), g \in L_p(\mu_C)\), with \(\|f\|_p, \|g\|_p \le 1\), 
+    \(\alpha, \beta\) scalars such that \(|\alpha| = |\beta| = 1\) and 
+    \[\alpha \psi_B(f) = |\psi_B(f)| \text{ and } \beta\psi_C(g) = |\psi_C(g)|,\] 
+    we observe
+    \[a |\psi_B(f)| + b|\psi_C(g)| = \psi_{B \cup C}(a\alpha f + b \beta g) \le 
+      \|\psi_{B \cup C}\| \|a \alpha f + b \beta g\|_p \le \|\psi_{B \cup C}\|\]
+    implying \(\|\psi_{B \cup C}\|^q \ge \|\psi_B\|^q + \|\psi_C\|^q\) as required.
+  \end{proof}
+
+  Let us now consider the case \(\mu\) is \(\sigma\)-finite. In this case, by definition, there exists 
+  a countable measurable partition of \(\Omega\): \((A_n)\) such that \(\mu(A_n) < \infty\) for all \(n\). 
+  So, for \(\psi \in L_p(\mu)^*\), we can restrict \(\psi\) onto \(A_n\) and apply the previous 
+  case. Namely, for all \(n\), there exists some \(g_n \in L_q(\mu_{A_n})\) such that
+  \[\psi_{A_n}(f) = \int f g_n \dd \mu_{A_n} = \int_{A_n} f g_n \dd\mu.\]
+  Observe that for all \(N \in \mathbb{N}\),
+  \[\sum_{n = 1}^N \|g_n\|_q^q = \sum_n^N \|\psi_{A_n}\| \stackrel{(*)}{=} 
+  \|\psi_{\bigcup_{n = 1}^N A_n}\| \le \|\psi\| < \infty.\]
+  where \((*)\) follows by the claim.
+
+  So, by defining \(g = g_n\) on \(A_n\), we have by the monotone convergence theorem 
+  \(g \in L_q(\mu)\) and \(\phi_g = \psi\) on \(L_p(\mu_{A_n})\) for all \(n\). Hence, as 
+  \(\bigcup L_p(\mu_{A_n})\) has dense linear span, \(\psi = \phi_g\) as required.
+
+  Finally, for the general case, take \(\psi \in L_p(\mu)^*\) and choose \((f_n)\) 
+  to be a sequence in \(L_p(\mu)\) such that \(\|f_n\| \le 1\) for all \(n\) and 
+  \[\psi(f_n) \to \|\psi\| \text{ as } n \to \infty.\]
+  Recall that for \(f \in L_p(\mu)\), 
+  \[\{f \neq 0\} = \bigcup_n \{|f| > n^{-1}\}\]
+  which is \(\sigma\)-finite as by Markov's inequality,
+  \[\mu(\{|f| > n^{-1}\}) \le n^p \|f\|_p^p < \infty\]
+  for all \(n\). Thus, defining \(B = \bigcup_n \{f_n \neq 0\}\), \(B\) is \(\sigma\)-finite and 
+  by the \(\sigma\)-finite case, there exists some \(g \in L_q(\mu_B)\) such that 
+  \(\phi_g = \psi_B\). Now, by the claim,
+  \[\|\psi\|^q = \|\psi_B\|^q + \|\psi_{\Omega \setminus B}\|^q\]
+  while by construction, \(\|\psi\|^q = \|\psi_B\|^q\). Thus, \(\psi_{\Omega \setminus B} = 0\) 
+  and \(\psi = \phi_g\).
+
+  We now start proving the case \(p = \infty\) and \(\mu\) is \(\sigma\)-finite. We first show 
+  \(\phi\) is isometric. Let \(g \in L_\infty(\mu)\). We've already shown \(\|\phi_g\| \le \|g\|_\infty\)
+  so it suffices to show the reverse inequality. WLOG. assume that \(g \neq 0\) and fix \(0 < s < \|g\|_\infty\) 
+  and define \(A = \{|g| > s\}\). Straightaway, we note \(\mu(A) > 0\) and so, as \(\mu\) is \(\sigma\)-finite, 
+  there exists some \(B \subseteq A\), \(0 < \mu(B) < \infty\).
+  Defining \(f = \mathbf{1}_B|g| / g\), we have \(f \in L_1\) and 
+  \[s \le \int_B |g| \dd \mu = \phi_g(f) \le \|\phi_g\| \|f\|_1 = \|\phi_g\|\mu(B).\]
+  Hence, \(s \le \|\phi_g\|\) and as \(s < \|g\|_\infty\) was arbitrary, we have \(\|\phi_g\| \ge \|g\|_\infty\) 
+  as required.
+
+  For subjectivity, we proceed similarly to the first case. Given \(\psi \in L_1^*\), define 
+  \[\nu(A) = \psi(\mathbf{1}_A), \text{ for all } A \in \mathcal{F}.\]
+  \(\nu\) is a complex measure and by Radon-Nikodym, there exists some \(g \in L_1\), \(\nu(A) = \int_A g \dd\mu\)
+  for all \(A \in \mathcal{F}\). Then, by approximating with simple functions, it is clear that 
+  \(\psi(f) = \int fg \dd \mu\) for all \(f \in L_\infty\).
+
+  We now show \(g \in L_\infty\). Fix 
+  \[t > \|\psi\|, A = \{|g| > t\}, f = \mathbf{1}_A \frac{|g|}{g}.\]
+  Then \(f \in L_\infty\) and thus,
+  \[t \mu(A) \le \int_A |g| \dd \mu = \int fg \dd \mu = \psi(f) \le \|\psi\|\|f\|_1 = \|\psi\| \mu(A).\]
+  However, as \(t > \|\psi\|\) by definition, we have \(\mu(A) = 0\) implying \(g \in L_\infty\).
+
+  So far we've shown \(\psi = \phi_g\) on \(L_\infty\). To show \(\psi = \phi_g\) on \(L_1\), we use 
+  the fact that \(L_\infty \subseteq L_1\) is dense for all \textit{finite} measures \(\mu\). As \(\mu\) 
+  is \(\sigma\)-finite, let \((A_n)\) be a measurable partition of \(\Omega\) of finite measures. Then 
+  For all \(\psi \in L_1(\mu)^*\), as \(\mu_n = \mu|_{A_n}\) is finite, there exists some \(g_n \in L_\infty(\mu_n)\)
+  such that 
+  \[\psi_n(f) = \psi|_{A_n}(f) = \int_{A_n} fg_n \dd \mu_n = \int g_n f \dd\mu.\]
+  Now, as \(\phi\) is isometric, \(\|g_n\|_\infty = \|\psi_n\| \le \|\psi\|\). Hence, taking \(g = g_n\) 
+  on \(A_n\), \(g \in L_\infty\) and \(\phi_g = \psi\) as required. 
+\end{proof} 
+
+\begin{corollary}
+  For all \(1 < p < \infty\), \(L_p(\mu)\) is reflexive. 
+\end{corollary}
+\begin{proof}
+  The previous theorem provides the isometric isomorphism 
+  \[\phi : L_q \to L_p^*, \langle f, \phi(g)\rangle = \int fg \dd \mu.\]
+  Then, its dual (see example sheet 1) \(\phi^* : (L_p^*)^* \to L_q^*\) is also an isometric 
+  isomorphism. Now, denoting \(\psi : L_p \to L_q^*\) the isometric isomorphism from \(L_p\) to 
+  \(L_q^*\) (constructed the same way as \(\phi\)), It suffices to show that 
+  \((\phi^*)^{-1} \circ \psi : L_p \to (L_p^*)^*\) is the canonical embedding. Indeed, 
+  for all \(f \in L_p, g \in L_q\), 
+  \[\langle g, \phi^*(\hat f) \rangle = \langle \phi(g), \hat f\rangle = 
+  \langle f, \phi(g) \rangle = \int fg \dd \mu = \langle g, \psi(f) \rangle,\]
+  so \(\phi^*(\hat f) = \psi(f)\) as claimed.
+\end{proof}
+
+\subsection{Dual of \texorpdfstring{\(C(K)\)}{C(K)}}
+
+\subsubsection{Preliminary definitions}
+
+For this section, we take \(K\) to be a compact Hausdorff space and introduce the following 
+notations:
+\begin{itemize}
+  \item \(C(K) = \{f : K \to \mathbb{C} \mid f \text{ continuous}\}\) equipped with the sup-norm;
+  \item \(C^\mathbb{R}(K) = \{f : K \to \mathbb{R} \mid f \text{ continuous}\};\)
+  \item \(C^+(K) = \{f \in C^\mathbb{R}(K) \mid f \ge 0\};\)
+  \item \(M(K) = C(K)^*;\)
+  \item \(M^\mathbb{R}(K) = \{\phi \in M(K) \mid \forall \phi \in C^\mathbb{R}(K), \phi(f) \in \mathbb{R}\};\)
+  \item \(M^+(K) = \{\phi : C(K) \to \mathbb{C} \mid \phi \text{ linear and } \forall f \in C^+(K), \phi(f) \ge 0\}.\)
+\end{itemize}
+
+We call elements of \(M^+(K)\) positive linear functionals.
+
+\begin{lemma}
+  Given \(\phi \in M(K)\), there exists unique \(\phi_1, \phi_2 \in M^\mathbb{R}(K)\) such that \(\phi = \phi_1 + i\phi_2\).
+\end{lemma}
+\begin{proof}
+  \textit{Uniqueness}: We observe for \(f \in C^\mathbb{R}(K)\), if \(\phi = \phi_1 + i\phi_2\), 
+  \[\phi(f) = \phi_1(f) + i \phi_2(f) \text{ and } \overline{\phi(f)} = \phi_1(f) - i\phi_2(f).\]
+  Thus, 
+  \[\begin{cases}
+    \phi_1(f) = \text{Re}(\phi(f)) = \frac{\phi(f) + \overline{\phi(f)}}{2}, \\
+    \phi_2(f) = \text{Im}(\phi(f)) = \frac{\phi(f) - \overline{\phi(f)}}{2i},
+  \end{cases}\]
+  so \(\phi_1\) and \(\phi_2\) are uniquely determined by \(\phi\) on \(C^\mathbb{R}(K)\) and hence 
+  also on \(C(K) = C^\mathbb{R}(K) + iC^\mathbb{R}(K)\).
+
+  \textit{Existence}: This works: 
+  \[\begin{cases}
+    \phi_1(f) = \frac{\phi(f) + \overline{\phi(\bar f)}}{2}, \\
+    \phi_2(f) = \frac{\phi(f) - \overline{\phi(\bar f)}}{2i}.
+  \end{cases}\]
+\end{proof}
+
+\begin{lemma}
+  The map 
+  \[\phi \mapsto \phi|_{C^\mathbb{R}(K)} : M^\mathbb{R}(K) \to C^\mathbb{R}(K)^*\]
+  is an isometric isomorphism.
+\end{lemma}
+\begin{proof}
+  Take \(\phi \in M^\mathbb{R}(K)\). It is clear that \(\|\phi|_{C^\mathbb{R}(K)}\| \le \|\phi\|\).
+  On the other hand, for \(f \in C(K)\), take \(\lambda \in S^1 \subseteq \mathbb{C}\) such that 
+  \(\lambda\phi(f) = |\phi(f)|\). Then, 
+  \[|\phi(f)| = \phi(\lambda f) = \phi(\text{Re}(\lambda f)) + i \phi(\text{Im}(\lambda f)).\]
+  However, as the left hand side is real, \(\phi(\text{Im}(\lambda f)) = 0\) and so 
+  \[|\phi(f)| = \phi(\text{Re}(\lambda f)) \le \|\phi|_{C^\mathbb{R}(K)}\| \|\text{Re}(\lambda f)\|
+    = \|\phi(f)\| \|f\|\]
+  proving isometry.
+
+  To prove subjectivity, take \(\psi \in C^\mathbb{R}(K)\). Then, defining 
+  \[\phi(f) = \phi(\text{Re}(f)) + i\psi(\text{Im}(f))\]
+  for all \(f \in C(K)\). It is clear \(\phi \in M(K)\) and \(\phi|_{C^\mathbb{R}(K)} = \psi\)
+  as required.
+\end{proof}
+
+\begin{lemma}
+  \(M^+(K) \subseteq M(K)\) (and in particular are continuous) and 
+  \[M^+(K) = \{\phi \in M(K) \mid \|\phi\| = \phi(1_K)\}.\]
+\end{lemma}
+\begin{proof}
+  Let \(\phi \in M^+(K)\) and \(f \in C^\mathbb{R}(K), \|f\|_\infty \le 1\) so that \(1_K \pm f \ge 0\).
+  Then,
+  \[0 \le \phi(1_K \pm f) = \phi(1_K) \pm \phi(f)\]
+  implying \(\phi(1_K) \ge |\phi(f)|\) and hence \(\|\phi|_{C^\mathbb{R}(K)}\| = \phi(1_K)\).
+  Thus, by the previous lemma, \(\phi \in M^\mathbb{R}(K)\) with \(\|\phi\| = \phi(1_K)\), i.e. 
+  we've shown
+  \[M^+(K) \subseteq \{\phi \in M(K) \mid \|\phi\| = \phi(1_K)\}\]
+
+  Now, suppose \(\phi \in M(K)\) is such that \(\|\phi\| = \phi(1_K)\), we want to show 
+  \(\phi \in M^+(K)\). WLOG. assume \(\|\phi\| = 1\). Then, taking \(f \in C^\mathbb{R}(K)\), 
+  \(\|f\|_\infty \le 1\), let us denote \(\phi(f) = a + ib\) for some \(a, b \in \mathbb{R}\). 
+  Observe, for \(t \in \mathbb{R}\), 
+  \[|\phi(f + it1_K)|^2 = |a + (b + t)i|^2 = a^2 +b^2 + 2bt + t^2\]
+  while on the other hand, 
+  \[|\phi(f + it1_K)|^2 \le \|\phi\|^2 \|f + it1_K\|^2 \le 1 + t^2\]
+  and so \( a^2 +b^2 + 2bt \le 1\) for all \(t\) which is only possible if \(b = 0\). Thus, 
+  \(\phi\) takes value in \(\mathbb{R}\). 
+
+  Now taking \(f \in C^+(K)\), \(\|f\|_\infty \le 1\), we have \(0 \le f \le 1_K\) and so 
+  \[-1_K \le 1_K - 2f \le 1_K\]
+  implying \(\|1_K - 2f\|_\infty \le 1\). Hence 
+  \[1 - 2\phi(f) = \phi(1_K - 2f) \le 1\]
+  implying \(\phi(f) \ge 0\) and so \(\phi \in M^+(K)\) as claimed.
+\end{proof}
+
+\begin{lemma}
+  For all \(\phi \in M^\mathbb{R}(K)\), there exists unique \(\phi^+, \phi^- \in M^+(K)\) such that 
+  \(\phi = \phi^+ - \phi^-\) and \(\|\phi\| = \|\phi^+\| + \|\phi^-\|\).
+\end{lemma}
+\begin{proof}
+  \textit{Existence}: Define \(\phi^+\) on \(C^+(K)\) as follows: for all \(f \in C^+(K)\), take 
+  \[\phi^+(f) = \sup\{\phi(g) \mid g \in C^+(K), g \le f\}.\]
+  It is clear that \(\phi^+(f) \ge \phi(0) = 0\) and \(\phi^+(f) \ge \phi(f)\). Furthermore, 
+  \(\phi^+\) is additive since for all \(f_1, f_2 \in C^+(K)\), \(0 \le g_1 \le f_1\) and 
+  \(0 \le g_2 \le f_2\), we have 
+  \[\phi^+(f_1 + f_2) \ge \phi(g_1 + g_2) = \phi(g_1) + \phi(g_2).\]
+  Hence, taking the supremum over \(g_1\) and \(g_2\) provides 
+  \[\phi^+(f_1 + f_2) \ge \phi^+(f_1) + \phi^+(f_2).\]
+  One the other hance, given \(0 \le g \le f_1 + f_2\),  
+  \[\phi(g) = \phi(g \wedge f_1) + \phi(g - (g \wedge f_1)) \le \phi^+(f_1) + \phi^+(f_2)\]
+  since \(g \wedge f_1 \le f_1\) and \(g - (g \wedge f_1) \le g - f_1 \le f_2\). 
+
+  Now, we define \(\phi^+\) on \(C^\mathbb{R}(K)\). such that for all \(f \in C^\mathbb{R}(K)\), by
+  writing \(f = f^+ - f^-, f^\pm \in C^+(K)\), we take 
+  \[\phi^+(f) = \phi^+(f^+) - \phi^+(f^-).\]
+  Finally, to define \(\phi^+\) on \(C(K)\), for all \(f \in C(K)\), we take 
+  \[\phi^+(f) = \phi^+(f_1) + i\phi^+(f_2)\]
+  where \(f_1, f_2 \in C^\mathbb{R}(K)\) are such that \(f = f_1 + if_2\).
+
+  Of course, now we've defined \(\phi^+ \in M^+(K)\), we take \(\phi^- = \phi^+ - \phi\). 
+  \(\phi^- \in M^+(K)\) also, since for all \(f \in C^+(K)\), 
+  \[\phi^-(f) = \phi^+(f) - \phi(f) \ge 0.\]
+  It remains to show \(\|\phi\| = \|\phi^+\| + \|\phi^-\|\). Indeed, by considering
+  \begin{equation}\label{eq:phi+phi-}
+    \|\phi\| \le \|\phi\|^+ + \|\phi^-\| = \phi^+(1_K) + \phi^-(1_K) = 2\phi^+(1_K) - \phi(1_K).
+  \end{equation}
+  On the other hand, for all \(0 \le f \le 1_K\), we have 
+  \[-1_K \le 2f - 1_K \le 1_f\]
+  and so \(\|2f - 1_K\|_\infty \le 1\). Hence, 
+  \[2\phi(f) - \phi(1_K) = \phi(2f - 1_K) \le \|\phi\|.\]
+  Thus, taking the supremum over \(f\), the right hand side of equaton~\eqref{eq:phi+phi-} is less 
+  equal to the operator norm of \(\phi\) implying 
+  \[\|\phi\| = \|\phi\|^+ + \|\phi^-\|\]
+  as required.
+
+  \textit{Uniqueness}: Suppose \(\phi = \psi_1 - \psi_2\) and \(\|\phi\| = \|\psi_1\| + \|\psi_2\|\) 
+  for some \(\psi_1, \psi_2 \in M^+(K)\). Then, for all \(0 \le g \le f\), 
+  \[\phi(g) = \psi_1(g) - \psi_2(g) \le \psi_1(g) \le \psi_1(f),\]
+  implying \(\psi_1 \ge \phi^+\) and \(\psi_1 - \phi^+ \in M^+(K)\). Thus, we also have
+  \(\psi_2 - \phi^- = \psi_1 - \phi^+ \in M^+(K)\). Then, 
+  \begin{align*}
+    \|\psi_1 - \phi^+\| + \|\psi_2 - \phi^-\| &= \psi_1(1_K) - \phi^+(1_K) + \psi_2(1_K) - \phi^-(1_K)\\
+    & = (\psi_1(1_K) + \psi_2(1_K)) - (\phi^+(1_K) + \phi^-(1_K))\\
+    & = (\|\psi_1\| + \|\psi_2\|) - (\|\phi^+\| + \|\phi^-\|)\\
+    & = \|\phi\| - \|\phi\| = 0
+  \end{align*} 
+  providing uniqueness.
+\end{proof}
+
+\subsubsection{Topological preliminaries}
+
+We recall the following facts:
+\begin{itemize}
+  \item \(K\) is said to be normal if for all disjoint closed subsets \(E_1, E_2 \subseteq K\), 
+    there exists disjoint open sets \(U_1, U_2 \subseteq K\) such that \(E_1 \subseteq U_1\) and
+    \(E_2 \subseteq U_2\).
+
+    Equivalently, if \(E \subseteq U \subseteq K\) are such that \(E\) is closed and \(U\) is open, 
+    then there exists a open \(V\) such that \(E \subseteq V \subseteq \overline{V} \subseteq U\).
+  \item \textit{Urysohn's lemma}: Given disjoint closed subsets \(E_1, E_2 \subseteq K\), there exists 
+    a continuous function \(f : K \to [0, 1]\) such that \(f = 0\) on \(E_1\) and \(f = 1\) on \(E_2\).
+
+\end{itemize}
+  
+\textit{Notations}: \(f \prec U\) denotes the fact that 
+\begin{itemize}
+  \item \(U\) is open,
+  \item \(f : K \to [0, 1]\) is continuous,
+  \item and \(\text{supp}(f) = \overline{\{x \mid f(x) \neq 0\}} \subseteq U\).
+\end{itemize}
+On the other hand, \(E \prec f\) denotes
+\begin{itemize}
+  \item \(E\) is closed;
+  \item \(f : K \to [0, 1]\) is continuous,
+  \item and \(f = 1\) on \(E\).
+\end{itemize}
+
+Using this notation, Urysohn's lemma provides the existence of a \(f\) such that \(E \prec f \prec U\).
+
+\begin{lemma}
+  Let \(E \subseteq K\) be closed and let \(U_j \subseteq K\) be open sets such 
+  that \(E \subseteq \bigcup_{j = 1}^n U_k\). Then, 
+  \begin{itemize}
+    \item there exists open \(V_j\) such that \(\overline{V_j} \subseteq U_j\) and 
+      \(E \subseteq \bigcup_{j = 1}^n V_j\).
+    \item there exists \(f_j \prec U_j\) such that \(\sum_{j = 1}^n f_j \le 1\) on \(K\) and 
+    \(\sum_{j = 1}^n f_j = 1\) on \(E\).
+  \end{itemize}
+\end{lemma}
+\begin{proof}
+  For the first part we induct on \(n\). 
+
+  Since \(E \setminus U_n \subseteq \bigcup_{j = 1}^{n - 1} U_j\) and \(E \setminus U_n\) is closed, 
+  we can apply the inductive hypothesis to obtain \(V_j\) for \(j = 1, \cdots, n - 1\) such that 
+  \(\overline{V_j} \subseteq U_j\) and \(E \setminus U_n \subseteq \bigcup_{j = 1}^{n - 1} V_j\).
+  Then,
+  \[E \setminus \bigcup_{j = 1}^{n - 1} V_j \subseteq U_n,\] 
+  and thus, by the normality of \(K\), there exists some open set \(V\), such that 
+  \[E \setminus \bigcup_{j = 1}^{n - 1} V_j \subseteq V \subseteq \overline{V} \subseteq U_n.\]
+  Hence, we have \(E \subseteq \bigcup_{j = 1}^n V_j\) where \(\overline{V_j} \subseteq U_j\) for all \(j\).
+
+  For the second part, choose \(V_j\) as in the first part. Then, by Urysohn's lemma, there exists 
+  \(g_j\) such that \(\overline{V_j} \prec g_j \prec U_j\) and 
+  \(K \setminus \bigcup V_j \prec g_0 \prec K \setminus E\). So, defining 
+  \(g = \sum_{j = 0}^n g_j\), \(g\) is continuous and satisfies \(g \ge 1\) on \(K\). Thus, 
+  setting \(f_j = g_j / g\) for \(j = 1, \cdots, n\), we have \(f_j : K \to [0, 1]\) is continuous and satisfies 
+  \[\sum_{j = 1}^n f_j = \sum_{j = 1}^n \frac{g_j}{g} \le 1\]
+  on \(K\), and by noting \(g_0 = 0\) on \(E\),
+  \[\sum_{j = 1}^n f_j = \sum_{j = 1}^n \frac{g_j}{g} = 1\]
+  on \(E\).
+\end{proof}
+
+\begin{definition}[Regular]
+  A Borel measure \(\mu\) on the Borel space \(X\) is said to be regular if 
+  \begin{itemize}
+    \item for all compact \(E \subseteq X\), \(\mu(E) < \infty\),
+    \item for all \(A \in \mathcal{B}(X)\), 
+      \[\mu(A) = \inf\{\mu(U) \mid A \subseteq U \in \mathcal{G}\}\]
+      where \(\mathcal{G}\) is the collection of all open sets in \(X\).
+    \item for all \(U \in \mathcal{G}\),
+      \[\mu(U) = \sup\{\mu(E) \mid E \subseteq U, E \text{ compact}\}.\]
+  \end{itemize}
+  A compact measure \(\nu\) is said to be regular if \(|\nu|\) is.
+\end{definition}
+
+\begin{proposition}
+  If \(X\) is compact Hausdorff, then TFAE:
+  \begin{itemize}
+    \item The Borel measure \(\mu\) is regular;
+    \item \(\mu(X) < \infty\) and for all \(A \in \mathcal{B}(X)\), 
+      \[\mu(A) = \inf\{\mu(U) \mid A \subseteq U \in \mathcal{G}\};\]
+    \item \(\mu(X) < \infty\) and for all \(A \in \mathcal{B}(X)\), 
+      \[\mu(A) = \sup\{\mu(E) \mid E \subseteq A, E \text{ closed}\}.\]
+  \end{itemize}
+\end{proposition}
+
+\subsubsection{Riesz-Markov representation theorem}
+
+If \(\nu\) is a complex Borel measure on \(K\), for any \(f \in C(K)\), we have \(f\) is Borel-measurable 
+and by observing
+\[\int |f| \dd |\nu| \le \|f\|_\infty |\nu|(K) < \infty,\]
+\(f\) is also \(\nu\)-integrable. Thus, we may define the bounded linear functional
+\[\phi : C(K) \to \mathbb{C} : f \mapsto \int f \dd \nu.\]
+\(\phi\) is clearly linear and it is bounded since 
+\[|\phi(f)| \le \int |f| \dd |\nu| \le \|f\|_\infty |\nu|(K)\]
+so \(\phi \in M(K) = C(K)^*\) and \(\|\phi\| \le \|\nu\|_1\). If \(\nu\) is a signed measure, then 
+\(\phi \in M^\mathbb{R}(K) \simeq C^\mathbb{R}(K)^*\) and if \(\nu\) is a positive measure, then 
+\(\phi \in M^+(K)\). It turns out that the converse is also true, namely elements of \(M(K)\) can also 
+be represented by complex measures.
+
+\begin{theorem}[Riesz-Markov representation]
+  Given \(\phi \in M^+(K)\), there exists a unique regular Borel measure \(\mu\) on \(K\) such that 
+  for all \(f\) \(\mu\)-integrable, \(\phi(f) = \int f \dd\mu\). Furthermore, \(\|\phi\| = \mu(K) = \|\mu\|_1\).
+\end{theorem}
+\begin{proof}
+  \textit{Uniqueness}: Suppose we have two regular Borel measures \(\mu_1, \mu_2\) both representing \(\phi\) 
+  in the sense as above. Then for all \(E \subseteq U \subseteq K\) with \(E\) closed and \(U\) open, 
+  by Urysohn's lemma, there exists some \(f : K \to [0, 1]\) such that \(E \prec f \prec U\). Hence, 
+  \[\mu_1(E) \le \int f \dd \mu_1 = \phi(f) = \int f \dd\mu_2 \le \mu_2(U).\]
+  So, as both \(\mu_1\) and \(\mu_2\) are regular, this implies \(\mu_1 \le \mu_2\). By symmetry, we 
+  also have \(\mu_2 \le \mu_1\) providing the uniqueness.
+
+  \textit{Existence}: We would like to define a measure akin to \(\mu(A) = \phi(1_A)\). However, 
+  as \(1_A\) is not continuous, we will approximate this construction by defining an outer measure \(\mu^*\).
+  
+  Given \(U \in \mathcal{G}\) (recall that \(\mathcal{G}\) is the set of all open sets in \(K\)), we 
+  define 
+  \[\mu^*(U) := \sup \{\phi(f) \mid f \prec U\}.\]
+  Observe straightaway that \(\mu^*(\varnothing) = 0\) and \(\mu^*(K) = \phi(1_K) = \|\phi\|\). 
+  
+  We will now show \(\mu^*\) satisfies sub-\(\sigma\)-additivity. Suppose we have \(U \subseteq \bigcup_{k = 1}^\infty U_k\) 
+  for some \(U, U_k \in \mathcal{G}\). Then, given \(f \prec U\), by compactness, there exists some \(n\) 
+  such that 
+  \[\text{supp}(f) \subseteq \bigcup_{k = 1}^n U_k.\]
+  By the partition of unity, for each \(k = 1, \cdots, n\), there exists some \(h_k \prec U_k\) such that 
+  \(\sum h_k \le 1\) on \(K\) and \(\sum h_k = 1\) on \(\text{supp}(f)\). Thus, 
+  \[\phi(f) = \phi\left(\sum_{k = 1}^n h_k f\right) = \sum_{k = 1}^n \phi(h_k f) 
+    \le \sum_{k = 1}^n \mu^*(U_k) \le \sum_{k = 1}^\infty \mu^*(U_k).\]
+  Hence, as this inequality holds for all \(f \prec U\), we have \(\mu^*(U) \le \sum_{k = 1}^\infty \mu^*(U_k)\).
+  Furthermore, it follows that given \(U, V \in \mathcal{G}\), \(U \subseteq V\), we have \(\mu^*(U) \le \mu^*(V)\) 
+  and so, 
+  \[\mu^*(U) = \inf \{\mu^*(V) \mid U \subseteq V \in \mathcal{G}\}.\]
+  With this in mind, we extend \(\mu^*\) to all of \(2^K\) by defining 
+  \[\mu^*(A) = \inf \{\mu^*(V) \mid A \subseteq V \in \mathcal{G}\}\]
+  for any \(A \subseteq K\).
+
+  Again, it is clear that \(\mu^*(\varnothing) = 0\) and \(\mu^*(K) = \|\phi\|\). For sub-\(\sigma\)-additivity,
+  let \(A \subseteq \bigcup_{k = 1}^\infty A_n\). Then, for any \(\epsilon > 0\), for each \(n\), we may choose 
+  \(U_n \in \mathcal{G}\) such that \(A_n \subseteq U_n\) and 
+  \[\mu^*(U_n) < \mu^*(A_n) + \epsilon 2^{-n}.\]
+  Hence, \(A \subseteq \bigcup_{k = 1}^\infty U_k\) and so,
+  \[\mu^*(A) \le \mu^*\left(\bigcup_{k = 1}^\infty U_k\right) \le \sum_{k = 1}^\infty \mu^*(U_k) 
+    \le \sum_{k = 1}^\infty \mu^*(A_k) + \epsilon.\]
+  Thus, as \(\epsilon > 0\) was arbitrary, it follows \(\mu^*(A) \le \sum_{k = 1}^\infty \mu^*(A_k)\) 
+  and \(\mu^*\) is an outer measure on \(K\). 
+  
+  Now, by Carathéodory extension, \(\mu^*\) restricts to a 
+  measure on the set of sets which are \(\mu^*\)-measurable. Thus, by showing all open sets of \(K\) 
+  are \(\mu^*\)-measurable, we may restrict \(\mu^*\) on to \(\mathcal{B}(K)\) to obtain the desired 
+  Borel measure. Take \(U \in \mathcal{G}\) and \(A \subseteq K\), we need to show 
+  \[\mu^*(A) \ge \mu^*(A \cap U) + \mu^*(A \setminus U).\]
+  First, let us consider the cas that \(A = V \in \mathcal{G}\). Then, taking \(f \prec U \cap V\) 
+  and \(g \prec V \setminus \text{supp}(f)\) so that \(f, g\) are disjointedly supported on \(V\), 
+  we have \(f + g \prec V\) and so, 
+  \[\mu^*(V) \ge \phi(f + g) = \phi(f) + \phi(g).\]
+  Taking the supremum over \(g\), we have 
+  \[\mu^*(V) \ge \phi(f) + \mu^*(V \setminus \text{supp}(f)) \ge \phi(f) + \mu^*(V \setminus U).\]
+  Now, taking the supremum over \(f\), 
+  \[\mu^*(V) \ge \mu^*(U \cap V) + \mu^*(V \setminus U)\]
+  as required. 
+
+  For general \(A\), let \(V \in \mathcal{G}\) such that \(A \subseteq V\). Then, 
+  \[\mu^*(V) \ge \mu^*(V \cap U) + \mu^*(V \setminus U) \ge \mu^*(A \cap U) + \mu^*(A \setminus U).\]
+  Hence, taking the infimum over \(V\), it follows 
+  \[\mu^*(A) \ge \mu^*(A \cap U) + \mu^*(A \setminus U)\]
+  as required.
+
+  Thus, \(\mu := \mu^*|_{\mathcal{B}}\) is a Borel measure on \(K\) and it is regular by construction. 
+  It remains to show that \(\mu\) represents \(\phi\). It is sufficient to show \(\phi(f) \le \int f \dd \mu\) 
+  for all \(f \in C^\mathbb{R}(K)\) since if this holds, then 
+  \[- \phi(f) = \phi(-f) \le \int -f \dd \mu = - \int f \dd \mu\]
+  providing the reverse inequality. 
+
+  Let \(f \in C^\mathbb{R}(K)\) and choose \(a < b \in \mathbb{R}\) so that \(f(K) \subseteq [a, b]\). 
+  WLOG. assume \(a > 0\) and fix \(\epsilon > 0\) and choose 
+  \[0 < y_0 < a < y_1 < \cdots < y_n = b\]
+  such that \(y_j - y_{j - 1} < \epsilon\). Let \(A_j := f^{-1}((y_{j - 1}, y_j])\) so 
+  \(K = \bigcup_{j = 1}^n\) is a Borel partition of \(K\). For each \(j\), choose \(U_j \in \mathcal{G}\) 
+  such that \(A_j \subseteq U_j \subseteq f^{-1}((y_{j - 1}, y_j + \epsilon))\) and 
+  \[\mu(U_j) < \mu(A_j) + \frac{\epsilon}{n}.\]
+  Then by the partition of unity, there exists \(h_j \prec U_j\) such that \(\sum_{j = 1}^n h_j = 1_K\) 
+  so
+  \begin{align*}
+    \phi(f) & = \sum_{j = 1}^n \phi(h_j f) \le \sum \phi((y_j + \epsilon) h_j) = \sum (y_j + \epsilon)\phi(h_j)\\
+      & \le \sum (y_j + \epsilon)\mu(U_j) \le \sum (y_j + \epsilon)\left(\mu(A_j) + \frac{\epsilon}{n}\right)\\
+      & = \int \sum y_j 1_{A_j} \dd\mu + 2 \epsilon \mu(K) + (b + 2\epsilon)\epsilon\\
+      & \le \int f \dd \mu + C \epsilon.
+  \end{align*} 
+  Hence, as \(\epsilon\) was arbitrary, \(\phi(f) \le \int f \dd \mu\) are required.
+\end{proof}
+
+\begin{corollary}
+  For all \(\phi \in M(K)\), there exists a unique regular Borel complex measure \(\nu\) such that 
+  for all \(f \in C(K)\), \(\phi(f) = \int f \dd \nu\) and \(\|\phi\| = \|\nu\|_1\). Furthermore, if 
+  \(\phi \in M^\mathbb{R}(K)\), then \(\nu\) is a signed measure.
+\end{corollary}
+\begin{proof}
+  Existence follows by Jordan decomposition while uniqueness follows from \(\|\phi\| = \|\nu\|_1\). 
+  We will show \(\|\phi\| = \|\nu\|_1\). We've seen that \(\|\phi\| \le \|\nu\|_1\) so it remains to 
+  show the reverse. Recall that 
+  \[\|\nu\| = |\nu|(K) = \sup \left\{\sum_{j = 1}^n |\nu(A_j)| \mid (A_j)_{j = 1}^n \text{ is a Borel partition of } K\right\}.\]
+  So, taking \((A_j)\) a Borel partition of \(K\), for each \(j\) let us choose \(E_j\) closed such that 
+  \(E_j \subseteq A_j\) and 
+  \[|\nu|(A_j \setminus E_j) < \frac{\epsilon}{n}\]
+  which exists by regularity. Noting that \(E_j \subseteq K \setminus \bigcup_{i \neq j} E_i\) which is 
+  open, there exists some open \(U_j\) such that \(E_j \subseteq U_j \subseteq K \setminus \bigcup_{i \neq j} E_i\)
+  and 
+  \[|\nu|(U_j \setminus E_j) < \frac{\epsilon}{n}.\]
+  Then, \(E := \bigcup_{j = 1}^n E_j \subseteq \bigcup_{j = 1}^n U_j\) and by the partition of unity, 
+  there exists \(h_j \prec U_j\) such that \(\sum h_j \le 1\) on K and \(\sum h_j = 1\) on \(E\). 
+  Now, as \(E_j\) are disjoint, \(h_j = 1\) on \(E_j\). Thus, choosing \(\lambda_j \in \mathbb{C}\), 
+  \(|\lambda| = 1\) such that \(|\nu|(E_j) = \lambda_j \nu(E_j)\), we have 
+  \begin{align*}
+    \left|\sum |\nu(E_j)| - \phi\left(\sum\lambda h_j\right)\right| 
+      & = \left|\sum \lambda_j \int (1_{E_j} - h_j) \dd \nu\right|\\
+      & \le \sum \int |1_{E_j} - h_j| \dd \nu \le \sum |\nu|(U_j \setminus E_j) < \epsilon.
+  \end{align*}
+  Hence, 
+  \begin{align*}
+    \sum |\nu(A_j)| & \le \sum |\nu(E_j)| + \epsilon \\
+    & \le \left|\phi\left(\sum \lambda_j 1_{E_j}\right)\right| 
+      \le \|\phi\| \left\| \sum \lambda_j h_j\right\|_\infty + 2\epsilon 
+      \le \|\phi\| + 2\epsilon,
+  \end{align*}
+  implying \(\|\nu\|_1 = \|\phi\|\) as required.
+\end{proof}
+
+\begin{corollary}
+  The space of regular complex Borel measures is a complex Banach space with the total variation 
+  norm and it is isometrically isomorphic to \(M(K) = C(K)^*\).
+\end{corollary}
+
+\newpage
+\section{Weak Topology}
+
+\subsection{General weak topology}
+
+Let \(X\) be a set and \(\mathcal{F}\) be a collection of functions such that for each \(f \in \mathcal{F}\), 
+\(f : X \to Y_f\) where \(Y_f\) is a topological space. Then the weak topology \(\sigma(X, \mathcal{F})\) 
+is the smallest topological space such that for all \(f \in \mathcal{F}\), \(f\) is continuous.
+We have the following straight forward properties about the weak topology.
+
+\begin{proposition} Taking \(X, \mathcal{F}\) as above,
+  \begin{itemize}
+    \item \(S := \{f^{-1}(U) \mid f \in \mathcal{F}, U \text{ open in } Y_f\}\) generates \(\sigma(X, \mathcal{F})\).
+    \item \(V \subseteq X\) is open in \(\sigma(X, \mathcal{F})\) iff for all \(x \in V\), there exists 
+    \(f_1, \cdots, f_n \in \mathcal{F}\) and open sets \(U_1, \cdots, U_n\) such that \(U_i \subseteq Y_{f_i}\)
+    and 
+    \[x \in \bigcap_{j = 1}^n f^{-1}_j(U_j) \subseteq V.\]
+    \item If \(S_f\) generates the topology of \(Y_f\) for all \(f \in \mathcal{F}\), then 
+    \(\{f^{-1}(U) \mid U \in S_f, f \in \mathcal{F}\}\) generates \(\sigma(X, \mathcal{F})\).
+    \item If \(Y_f\) is Hausdorff for all \(f \in \mathcal{F}\) and \(\mathcal{F}\) separates points, 
+    then, so is \(\sigma(X, \mathcal{F})\) Hausdorff.
+    \item If \(Y \subseteq X\), then \(\sigma(X, \mathcal{F})|_Y = \sigma(Y, \mathcal{F}|_Y)\).
+    \item (universal property) Given \(Z\) a topological space and \(g : Z \to X\), then \(g\) is continuous 
+    with respect to \(\sigma(X, \mathcal{F})\) iff for all \(f \in \mathcal{F}\), \(f \circ g : Z \to Y_f\)
+    is continuous.
+  \end{itemize}
+\end{proposition}
+
+The weak topology generalizes the subspace topology by considering \(\sigma(Y, \{\iota\})\) for 
+\(\iota : Y \hookrightarrow X\) the inclusion map and the product topology which has the topology 
+\[\sigma\left(\prod_{\gamma \in \Gamma} X_{\gamma}, \{\pi_{\gamma} \mid \gamma \in \Gamma\}\right),\]
+where \(\pi_{\gamma} : \prod_{\gamma \in \Gamma} X_{\gamma} \to X_{\gamma}\) is the projection map.
+
+\begin{proposition}
+  Let \(X\) be a set and for each \(n \in \mathbb{N}\), let \((Y_n, d_n)\) be metric spaces. Then, if 
+  \(\mathcal{F} := \{f_n : X \to Y_n \mid n \in \mathbb{N}\}\) separates points, then \(\sigma(X, \mathcal{F})\)
+  is metrizable.
+\end{proposition}
+\begin{proof}
+  WLOG. by replacing \(d_n\) by \(d_n \wedge 1\) which is equivalent, we may assume that \(d_n \le 1\). 
+  Then, it is easy to check that 
+  \[d(x, y) := \sum_{n = 1}^\infty 2^{-n} d_n(f_n(x), f_n(y)),\]
+  form a metric on \(X\). 
+
+  By noting that any \(f_n\) in the above proposition is Lipschitz with respect to the topology generated 
+  by \(d\), \(f_n\) is \(\mathcal{T}_d\)-continuous and so \(\sigma(X, \mathcal{F}) \subseteq \mathcal{T}_d\). Conversely, 
+  as each \(f_n\) is \(\sigma(X, \mathcal{F})\)-continuous, the map 
+  \[(x, y) \mapsto d_n(f_n(x), f_n(y))\]
+  is also \(\sigma(X, \mathcal{F})\)-continuous. Hence, by the Weierstass-M-test, it follows \(d\) is also 
+  \(\sigma(X, \mathcal{F})\)-continuous implying 
+  \[\mathcal{T}_d = \sigma(X, \mathcal{F})\]
+  as required.
+\end{proof}
+
+\begin{theorem}[Tychonov]
+  The product of compact spaces is compact in the product topology.
+\end{theorem}
+\begin{proof}
+  Let \(\Gamma\) be the index set and for each \(\gamma \in \Gamma\), let \(X_\gamma\) be a 
+  compact space and denote \(X = \prod_{\gamma \in \Gamma} X_\gamma\). We will show \(X\) is 
+  compact by showing: for any non-empty family of closed sets \(\mathcal{A}\) with the 
+  finite intersection property (fip.), that is, for all \(A_1, \cdots, A_n \in \mathcal{A}\),
+  we have \(\bigcap_{i = 1}^n A_i \neq \varnothing\), then \(\bigcap_{A \in \mathcal{A}} A \neq \varnothing\). 
+
+  By Zorn's lemma, there exists a maximal family \(\mathcal{B}\) of (not necessarily closed) subsets of 
+  \(X\) with fip. and satisfies \(\mathcal{A} \subseteq \mathcal{B}\). Then, 
+  \[\bigcap_{A \in \mathcal{A}} A \supseteq \bigcap_{B \in \mathcal{B}} B\]
+  and so, it suffices to show \(\bigcap_{B \in \mathcal{B}} B \neq \varnothing\).
+
+  By the maximality of \(\mathcal{B}\), we observe that if \(A \subseteq X\) satisfies 
+  \(A \cap B \neq \varnothing\) for all \(B \in \mathcal{B}\), then \(A \in B\). 
+  Fix \(\gamma \in \Gamma\), \(\{\pi_\gamma(B) \mid B \in \mathcal{B}\}\) has fip. and 
+  hence, as \(X_\gamma\) is compact, it follows 
+  \(\bigcap_{B \in \mathcal{B}} \overline{\pi_{\gamma}^{-1}(B)} \neq \varnothing\).
+  Choose \(x_\gamma \in \bigcap_{B \in \mathcal{B}} \overline{\pi_{\gamma}^{-1}(B)}\), 
+  we will show \(x = (x_\gamma)_{\gamma \in \Gamma} \in \bigcap_{B \in \mathcal{B}} \overline{B}\).
+  Let \(V\) be an open neighborhood of \(x\), we need to show \(V \cap B \neq \varnothing\) for all 
+  \(B \in \mathcal{B}\). WLOG. write 
+  \[V = \bigcap_{i = 1}^n \pi^{-1}_{\gamma_i}(U_i)\]
+  for some \(\gamma_1, \cdots, \gamma_n \in \Gamma\) and \(U_1, \cdots, U_n\) open neighborhoods of
+  \(x_{\gamma_i}\).
+
+  Since \(x_{\gamma_i} \in \bigcap_{B \in \mathcal{B}} \pi_{\gamma_i}^{-1}(B)\), we have
+  \(U_{\gamma_i} \cap \pi_{\gamma_i}(B) \neq \varnothing\) for all \(B \in \mathcal{B}\). 
+  Thus, by maximality, we have \(\pi_{\gamma_i}^{-1}(U_i) \in \mathcal{B}\) and so 
+  \[V = \bigcap_{i = 1}^n \pi_{\gamma_i}^{-1}(U_i) \in \mathcal{B}\]
+  implying \(V \cap B \neq \varnothing\) for all \(B \in \mathcal{B}\). Hence, as \(V\) was chosen 
+  arbitrarily, \(x \in B\) for all \(B \in \mathcal{B}\) as required.
+\end{proof}
+
+\subsection{Weak topology on vector spaces}
+
+Let \(E\) be a real or complex vector space and \(F\) a subspace of the space of all linear functionals 
+on \(E\) that separates points of \(E\). We will in this section consider \(\sigma(E, F)\). 
+We recall that \(U \subseteq E\) is weakly open iff for all \(x \in U\), there exists 
+\(f_1, \cdots, f_n \in F\), \(\epsilon > 0\) such that 
+\[\{y \in E \mid |f_i(y - x)| < \epsilon, i = 1, \cdots, n\} \subseteq U.\]
+For \(f \in F\), define \(p_f : E \to \mathbb{R}\) by \(p_f(x) = |f(x)|\). Then, 
+\[\mathcal{P} := \{p_f \mid f \in F\}\]
+is a family of semi-norms which separates points of \(E\). Thus, the weak topology on \(E\) generated 
+by \(F\) is the same as the LCS topology generated by \(\mathcal{P}\).
+
+\begin{lemma}
+  Let \(E\) be a real or complex vector space and \(f, g_1, \cdots, g_n\) linear functionals on \(E\) 
+  such that 
+  \[\bigcap_{i = 1}^n \ker g_i \subseteq \ker f_i.\]
+  Then, \(f \in \langle g_1, \cdots, g_n \rangle\).
+\end{lemma}
+\begin{proof}
+  Define \(T : E \to \mathbb{F}^n\) by \(Tx = (g_i(x))_{i = 1}^n\). Then, \(\ker T \subseteq \ker f\).
+  Thus, there exists some linear \(h : \text{Im}(T) \to \mathbb{F}\) such that \(f = h \circ T\). Thus, 
+  by Hahn-Banach, extending \(h\) to \(\mathbb{F}^n \to \mathbb{F}\), we can write 
+  \(h(y) = \sum_{i = 1}^n a_i y_i\) for all \(y = (y_i)_{i = 1}^n \in \mathbb{R}^n\). Hence, 
+  for all \(x \in E\), 
+  \[f(x) = h(Tx) = \sum_{i = 1}^n a_i g_i(x),\]
+  implying \(f \in \langle g_1, \cdots, g_n \rangle\) as required.
+\end{proof}
+
+\begin{proposition}
+  Let \(E, F\) as above. A linear functional \(f\) on \(E\) is weakly continuous iff \(f \in F\).
+  Namely, \((E, \sigma(E, F))^* = F\).
+\end{proposition}
+\begin{proof}
+  The converse is true by definition. For the other direction, let \(f\) be a weakly continuous linear 
+  functional. Then, \(V := f^{-1}(B_1(0))\) is an open neighborhood of \(0\) in \((E, \sigma(E, F))\).
+  Thus, there exists \(g_1, \cdots, g_n \in F\) and \(\epsilon > 0\) such that 
+  \[U := \{x \in E \mid |g_i(x)| < \epsilon, i = 1, \cdots, n\} \subseteq V.\]
+  Then, for all \(x \in \bigcap_{i = 1}^n \ker g_i\), for all \(\lambda \in \mathbb{F}\) 
+  such that \(\lambda x \in U \subseteq V\) and so, \(|f(\lambda x)| = |\lambda| |f(x)| < 1\) 
+  implying \(x \in \ker f\). Thus, by the previous lemma \(f \in \langle g_1, \cdots, g_n \rangle\) 
+  and so \(f \in F\).
+\end{proof}
+
+If \(X\) is a normed space, the weak topology on \(X\) is \(w := \sigma(X, X^*)\). By Hahn-Banach, \(X^*\) 
+separates points of \(X\) and so the weak topology is Hausdorff. As before, a subset \(U \subseteq X\) 
+is weakly open iff for all \(x \in U\), there exists \(f_1, \cdots, f_n \in X^*\) and \(\epsilon > 0\) 
+such that
+\[\{y \in X \mid |f_i(y - x)| < \epsilon, i = 1, \cdots, n\} \subseteq U.\]
+Now, by identifying \(X\) in \((X^*)^*\) by the canonical embedding, we define the weak-* topology 
+on \(X^*\) by \(w^* := \sigma(X^*, X)\). A subset \(U \subseteq X^*\) is weak-* open iff for all
+\(f \in U\), there exists \(x_1, \cdots, x_n \in X\) and \(\epsilon > 0\) such that
+\[\{g \in X^* \mid |g(x_i) - f(x_i)| < \epsilon, i = 1, \cdots, n\} \subseteq U.\]
+
+\begin{proposition}
+  \((X, w), (X^*, w^*)\) are locally convex spaces. In particular, they are Hausdorff and their 
+  vector space operations are continuous. Furthermore, 
+  \begin{itemize}
+    \item \(w \subseteq \|\cdot\|-\text{topology}\) with equality iff \(X\) is finite dimensional.
+    \item \(w^* \subseteq \sigma(X^*, (X^*)^*) \subseteq \|\cdot\|-\text{topology}\) with the first 
+      inclusion becoming an equality iff \(X\) is reflexive and the second inclusion becoming an
+      equality iff \(X\) is finite dimensional.
+    \item if \(Y \le X\), then 
+      \[\sigma(X, X^*)|_Y = \sigma(Y, \{f|_Y \mid f \in X^*\}) = \sigma(Y, Y^*)\]
+      where the last equality follows by Hahn-Banach.
+    \item The canonical embedding \(X \to (X^*)^*\) is a w-to-w* homeomorphism between \(X\) 
+      and \(\hat X\).
+  \end{itemize}
+\end{proposition}
+
+\begin{proposition}
+  Let \(X\) be a normed space. Then,
+  \begin{itemize}
+    \item a linear functional \(f\) on \(X\) is weakly continuous iff \(f \in X^*\).
+    \item a linear functional \(\phi\) on \(X^*\) is weak-* continuous iff \(\phi \in \hat X\).
+    \item \(\sigma(X^*, X) = \sigma(X^*, (X^*)^*)\) iff \(X\) is reflexive.
+  \end{itemize}
+\end{proposition}
+\begin{proof}
+  The only slightly non-trivial part is the forward direction of the third statement. But this is 
+  also straight forward. Let \(\phi \in (X^*)^*\), we need to show \(\phi \in \hat X\). 
+  Since \(\sigma(X^*, X) = \sigma(X^*, (X^*)^*)\), \(f\) is weak-* continuous and the result follows 
+  by the second claim.
+\end{proof}
+
+\begin{definition}
+  Let \(X\) be a normed space, \(A \subseteq X\) is said to be weakly bounded if 
+  \(\{f(x) \mid x \in A\}\) is bounded for all \(f \in X^*\).
+\end{definition}
+
+Clearly, as all \(f \in X^*\) are bounded, bounded in \(\|\cdot\|\) implies weakly bounded.
+
+We recall the principle of uniformly boundedness (PUB).
+
+\begin{theorem}
+  Let \(X\) be a Banach space, Y a normed space and \(\mathcal{T} \subseteq \mathcal{B}(X, Y)\). 
+  Then, if \(\mathcal{T}\) is point-wise bounded, i.e. 
+  \[\sup_{T \in \mathcal{T}} \|Tx\| < \infty,\]
+  then \(\sup_{T \in \mathcal{T}} \|T\| < \infty\).
+\end{theorem}
+
+\begin{proposition}
+  If \(X\) is a normed space, 
+  \begin{itemize}
+    \item if \(A \subseteq X\) is weakly bounded, then \(A\) is \(\|\cdot\|\)-bounded.
+    \item if \(X\) is in addition complete, then if \(B \subseteq X^*\) is w*-bounded, then 
+      \(B\) is \(\|\cdot\|\)-bounded.
+  \end{itemize}
+\end{proposition}
+\begin{proof}
+  Firstly, defining \(\hat A = \{\hat x \mid x \in A\}\), as \(A\) is weakly bounded, for all 
+  \(f \in X^*\), 
+  \[\sup_{\hat x \in \hat X}\|\hat x(f)\| = \sup_{x \in A} \|f(x)\| < \infty.\]
+  Thus, by PUB (note that we are using the fact \((X^*)^*\) is complete), 
+  \(\sup_{x \in A} \|x\| = \sup_{\hat x \in \hat A} \|\hat x\| < \infty\) 
+  as required. 
+  
+  On the other hand, if \(X\) i complete and \(B \subseteq X^*\) is w*-bounded, then 
+  we may directly apply PUB to obtain the bound in \(\|\cdot\|\) as required.
+\end{proof}
+
+\newpage
+\section{Banach Algebra}
+
+\subsection{Definitions}
+
+\begin{definition}[Algebra]
+  A real or complex algebra is a real or resp. complex vector space \(A\) with a multiplication
+  \[A \times A \to A : (a, b) \mapsto ab,\]
+  such that 
+  \begin{itemize}
+    \item \((ab)c = a(bc)\),
+    \item \(a(b+c) = ab + ac\),
+    \item \((a + b)c = ac + bc\),
+    \item for all \(\lambda \in \mathbb{R}\) or resp. \(\mathbb{C}\), \(\lambda(ab) = (\lambda a)b = a(\lambda b)\).
+  \end{itemize}
+\end{definition}
+
+\begin{definition}[Unital]
+  An algebra is said to be \textit{unital} if there exists a \(1 \ne 0 \in A\) such that for all \(a \in A\),
+  \[a1 = 1a = a.\]
+  Such an element is unique and is called the unit of \(A\).
+\end{definition}
+
+\begin{definition}[Algebra norm]
+  An algebra norm on an algebra \(A\) is a vector norm \(\|\cdot\|\) such that for all \(a, b \in A\), 
+  \[\|ab\| \le \|a\| \|b\|.\]
+\end{definition}
+This property implies that multiplication is continuous wrt. the topology induced by the norm.
+
+\begin{definition}[Normed algebra]
+  A normed algebra is an algebra with an algebra norm.
+\end{definition}
+
+\begin{definition}[Banach algebra]
+  A Banach algebra is a complete normed algebra.
+\end{definition}
+
+\begin{definition}[Unital normed algebra]
+  A unital normed algebra is a unital algebra with a algebra norm such that \(\|1\| = 1\).
+\end{definition}
+
+If \(A\) is a unital algebra with an algebra norm \(\|\cdot\|\), then defining another norm
+\[\|a\|' := \sup \{\|ab\| \mid \|b\| \le 1\}.\]
+\(\|\cdot\|\) and \(\|\cdot\|'\) are equivalent and \(\|1\|' = 1\). Thus, we can always make a 
+unital algebra with an algebra norm into a unital normed algebra with the same topology.
+  
+\begin{definition}[Algebra homomorphism]
+  Let \(A, B\) be algebras. A homomorphism from \(A\) to \(B\) is a linear map \(\theta : A \to B\) 
+  such that 
+  \[\theta(xy) = \theta(x) \theta(y)\]
+  for all \(x, y \in A\).
+  If \(A, B\) are in addition unital, then we also require \(\theta(1_A) = 1_B\).
+
+  If \(\theta\) is bijective, then we say it is an isomorphism.
+\end{definition}
+
+We note that for \(A, B\) normed algebras, a homomorphism is \textit{not} assumed to be continuous 
+while isomorphism is assumed to be continuous with a continuous inverse.
+
+As our focus is on spectral theory, from this point forward, we will assume the scalar field is \(\mathbb{C}\).
+
+\begin{example} 
+  Let \(K\) be a compact Hausdorff space. Then \(C(K)\) is a commutative unital Banach algebra under 
+  pointwise multiplication.
+
+  Furthermore, a uniform algebra on \(K\) is a closed subalgebra of \(C(K)\) which separates points 
+  of \(K\) and contain the constant functions. In the real case, Stone-Weierstrass implies that 
+  it must be all of \(C(K)\). In our case however (with complex scalar field), Stone-Weierstrass in 
+  addition requires the subalgebra to be closed under conjugation.
+
+  An example of this is 
+  \[A(\Delta) = \{f \in C(\Delta) \mid f \text{ holomorphic on } \Delta^\circ\}\]
+  where \(\Delta = \{z \in \mathbb{C} \mid |z| \le 1\}.\)
+
+  More generally, let \(K \subseteq \mathbb{C}\) be a non-empty compact subset. Then, we have the 
+  following uniform algebras on \(K\):
+  \[\mathcal{P}(K) \subseteq \mathcal{R}(K) \subseteq \mathcal{O}(K) \subseteq A(K) \subseteq C(K),\]
+  where \(\mathcal{P}(K), \mathcal{R}(K), \mathcal{O}(K)\) are the closures of resp. 
+  polynomials, rational functions without poles in \(K\) and holomorphic functions on some 
+  open neighborhood of \(K\). We shall see later that \(\mathcal{R}(K) = \mathcal{O}(K)\) (always) and 
+  \[\mathcal{P}(K) = \mathcal{R}(K) \iff \mathbb{C} \setminus K \text{ is connected.}\]
+  On the other han, \(\mathcal{R}(K) \neq A(K)\) and 
+  \[A(K) = C(K) \iff K^\circ = \varnothing.\]
+\end{example}
+
+\begin{example}
+  \(L_1(\mathbb{R})\) with the \(L_1\)-norm and convolution as multiplication is a commutative 
+  Banach algebra without a unit (Riemann-Lebesgue lemma).
+\end{example}
+
+\begin{example}
+  Let \(X\) be a Banach space. Then \(\mathcal{B}(X)\) (bounded linear operators from \(X\) to itself)
+  with the operator norm and composition as multiplication is a unital Banach algebra.
+  It is not commutative if \(\dim X \ge 2\). 
+
+  In the special case that \(X\) is a Hilbert space, then \(\mathcal{B}(X)\) is what is known as 
+  a \(C^*\)-algebra.
+\end{example}
+
+\subsection{Constructions}
+
+\textit{Subalgebra}: Let \(A\) be an algebra and \(B\) a subalgebra of \(A\). If \(A\) is unital with unit 
+\(1\), then \(B\) is unital if \(1 \in B\). If \(A\) is a normed algebra, then \(\overline{B}\) 
+is also a subalgebra.
+
+\textit{Unitization}: If \(A\) is a normed algebra. The unitization of \(A\) is the vector space 
+\(A_+ = A \oplus \mathbb{C}\) with multiplication 
+\[(a, \lambda)(b, \mu) = (ab + \lambda a + b\mu, \lambda \mu).\]
+Then, \(A_+\) is a unital algebra with the unit \((0, 1)\). The set \(\{(a, 0) \mid a \in A\}\) is 
+an ideal of \(A_+\) and is isomorphic as an algebra to \(A\). We write 
+\[A_+ = \{a + \lambda 1 \mid a \in A, \lambda \in \mathbb{C}\}.\]
+If \(A\) is a normed algebra, then so is \(A_+\) with the norm 
+\[\|a + \lambda 1\| = \|a\| + |\lambda|\]
+and in this case, \(A\) is a closed ideal of \(A_+\). Furthermore, if \(A\) is a Banach algebra, 
+so is \(A_+\).
+
+\textit{Ideals}: Let \(A\) be a normed algebra. If \(J \trianglelefteq A\), then also 
+\(\overline{J} \trianglelefteq A\). If \(J\) is a closed ideal of \(A\), then we can define \(A / J\) 
+which is a normed algebra with the quotient norm. 
+
+If \(A\) is in addition unital, and \(J\) is a proper ideal, then \(A / J\) is a unital normed algebra
+with the unit \(1 + J\).
+
+\textit{Completion}: Let \(A\) be a normed algebra and \(\tilde A\) be its completion. For \(a, b \in \tilde A\), 
+by construction, we may choose sequences \((a_n), (b_n) \subseteq A\) such that \(a_n \to a\) and 
+\(b_n \to b\). Then, defining 
+\[ab = \lim_{n \to \infty} a_n b_n\]
+where the right hand side exists and it's Cauchy, \(\tilde A\) is a Banach algebra which contains 
+\(A\) as a dense subalgebra.
+
+\textit{Operator algebra}: Let \(A\) be a unital Banach algebra. For each \(a \in A\), we define 
+\[L_a : A \to A: x \mapsto ax.\]
+\(L_a\) is clearly linear, and is bounded as \(\|ax\| \le \|a\|\|x\|\). The map 
+\(a \mapsto L_a : A \to \mathcal{B}(A)\) is an isometric homomorphism. Thus, every Banach algebra 
+is a closed subalgebra of \(\mathcal{B}(X)\) for some \(X\). 
+
+\begin{lemma}
+  Let \(A\) be a unital Banach algebra and let \(a \in A\). Then, \(a\) is invertible if \(\|a - 1\| < 1\).
+  Furthermore, 
+  \[\|a^{-1}\| \le \frac{1}{1 - \|1 - a\|}.\]
+\end{lemma}
+\begin{proof}
+  Let \(h = 1 - a\) so \(a = 1 - h\), \(\|h\| < 1\) and \(\|h^n\| \le \|h\|^n\). Thus, 
+  \(\sum_{n = 0}^\infty \|h^n\|\) converges in \(\mathbb{R}\) and so \(b := \sum_{n = 0}^\infty h^n\) 
+  converges in \(A\) (as \(A\) is a Banach space). With this in mind, we observe 
+  \[ab = (1 - h)\sum_{n = 0}^\infty h^n = \sum h^n - \sum h^{n + 1} = 1.\]
+  Similarly \(ba = 1\) so \(a\) is invertible. Moreover, 
+  \[\|a^{-1}\| \le \sum_{n = 0}^\infty \|h\|^n = \frac{1}{1 - \|h\|} = \frac{1}{1 - \|1 - a\|}\]
+  as required.
+\end{proof}
+
+We introduce the notation 
+\[G(A) = \{a \in A \mid a \text{ invertible}\}.\]
+
+\begin{corollary}
+  Let \(A\) be a unital Banach algebra, then 
+  \begin{enumerate}
+    \item\label{cor:inv_open} \(G(A)\) is open.
+    \item \(x \mapsto x^{-1} : G(A) \to G(A)\) is continuous.
+    \item\label{cor:conv_ninv} If \((x_n) \subseteq G(A)\) converges to \(x \not\in G(A)\), then \(\|x_n^{-1}\| \to \infty\).
+    \item If \(x \in \partial G(A)\), then there exists a sequence \((z_n)\) with \(\|z_n\| = 1\) for all 
+      \(n\) such that 
+      \[z_n x \to 0 \text{ and } x z_n \to 0.\]
+      It follows that \(x\) has no left or right inverse (even in any unital Banach algebra containing 
+      \(A\) isometrically).
+  \end{enumerate}
+\end{corollary}
+\begin{proof}\(\)\newline
+  \begin{enumerate}
+    \item Let \(x \in G(A), y \in A\). If \(\|y - x\| < \|x^{-1}\|^{-1}\), then 
+    \[\|1 - x^{-1}y\| = \|x^{-1}(x - y)\| \le \|x^{-1}\| \|x - y\| < 1\]
+    and so, \(x^{-1}y \in G(A)\) and hence also \(y \in G(A)\). 
+    \item Fix \(x, y \in G(A)\), then
+    \[\|y^{-1} - x^{-1}\| = \|y^{-1}(x - y)x^{-1}\| \le \|y^{-1}\|\|x^{-1}\|\|x - y\|.\]
+    Then, if \(\|x - y\| < (2 \|x^{-1}\|)^{-1}\), we have 
+    \[\|y^{-1}\| - \|x^{-1}\| \le \|y^{-1} - x^{-1}\| \le \frac{1}{2}\|y^{-1}\|\]
+    implying \(\|y^{-1}\| \le 2\|x^{-1}\|\). Thus, 
+    \[\|y^{-1} - x^{-1}\| \le \|y^{-1}\|\|x^{-1}\|\|x - y\| \le 2 \|x^{-1}\|^2 \|x - y\|\]
+    which converges to 0 as \(y \to x\).
+    \item From~\ref{cor:inv_open}, for all \(y \in A\) and \(\|y - x_n\| < \|x_n^{-1}\|^{-1}\), we have 
+    \(y \in G(A)\). Hence, \(\|x_n - x\| \ge \|x_n^{-1}\|^{-1}\) implying \(\|x_n^{-1}\| \to \infty\)
+    as claimed.
+    \item Choose \((x_n)\) in \(G(A)\) such that \(x_n \to x\). Then, defining 
+    \[z_n := \frac{x_n^{-1}}{\|x_n^{-1}\|},\]
+    we have \(\|z_n\| = 1\) and 
+    \[\|z_n x\| = \|z_n x + z_n(x - x_n)\| \le \frac{1}{\|x_n^{-1}\|} + \|z_n\| \|x - x_n\|.\]
+    Now, as \(\|x_n^{-1}\|^{-1}\) converges to \(0\) by~\ref{cor:conv_ninv}, the right hand side 
+    converges to 0 as \(n \to \infty\) allowing us to conclude.
+  \end{enumerate}
+\end{proof}
+
+\subsection{Spectrum} 
+
+\begin{definition}[Spectrum]
+  Let \(A\) be an algebra and let \(x \in A\). We define the spectrum \(\sigma_A(x)\) of \(x\) to be
+  \[\sigma_A(x) := \{\lambda \in \mathbb{C} \mid \lambda 1 - x \not\in G(A)\}\]
+  if \(A\) is unital and 
+  \[\sigma_A(x) := \sigma_{A_+}(x)\]
+  if \(A\) is not unital.
+\end{definition}
+
+\begin{example}
+  If \(A = M_n(\mathbb{C})\), then \(\sigma_A(x)\) is the set of eigenvalues of \(x\).
+\end{example}
+
+\begin{example}
+  If \(A = C(K)\) for a compact Hausdorff \(K\), \(f \in A\), then \(\sigma_A(f) = f(K)\) since 
+  \(g \in A\) is invertible if and only if \(0 \not\in g(K)\).
+\end{example}
+
+\begin{example}
+  If \(X\) is a Banach space, \(A = \mathcal{B}(X)\), \(T \in A\). Then, 
+  \[\sigma_A(T) = \{\lambda \in \mathbb{C} \mid \lambda \text{id} - T \text{ is not an isomorphism}\}.\]
+\end{example}
+
+\begin{theorem}
+  Let \(A\) be a Banach algebra and \(x \in A\). Then \(\sigma_A(x)\) is non-empty compact subset of 
+  \(\{\lambda \in \mathbb{C} \mid |\lambda| \le \|x\|\}\). 
+\end{theorem}
+\begin{proof}
+  By unitization, we may assume \(A\) is unital. Consider that the map 
+  \[\lambda \mapsto \lambda 1 - x : \mathbb{C} \to A\]
+  is continuous and \(\sigma_A(x)\) is the inverse image of \(A \setminus G(A)\) under this map, 
+  \(\sigma_A(x)\) must be closed. 
+
+  Now, if \(|\lambda| > \|x\|\), then \(\|x / \lambda\| < 1\) and so by the previous theorem, 
+  \(1 - x / \lambda \in G(A)\). Thus, as \(\lambda \ne 0\), \(\lambda(1 - x / \lambda) = \lambda 1 - x \in G(A)\)
+  and hence, \(\lambda \not \in \sigma_A(x)\). As we've shown that \(\sigma_A(x) \subseteq \mathbb{C}\) 
+  is closed and bounded, it is thusly compact.
+
+  Finally, we will show it is non-empty. Suppose otherwise, then we can define the (resolvent) map 
+  \[R : \mathbb{C} \to G(A) : \lambda \mapsto (\lambda 1 - x)^{-1}\]
+  which in particular is holomorphic since
+  \[R(\lambda) - R(\mu) = R(\lambda)((\mu 1 - x) - (\lambda 1 - x))R(\mu)  = (\mu - \lambda)R(\lambda) - R(\mu).\]
+  Thus, 
+  \[\frac{R(\lambda) - R(\mu)}{\lambda - \mu} = -R(\lambda)R(\mu) \to -R(\mu)^2\]
+  as \(\lambda \to \mu\) since \(R\) is continuous.
+
+  Now, for \(|\lambda| > \|x\|\), \(R(\lambda) = \lambda^{-1}(1 - x / \lambda)^{-1}\) 
+  and so, 
+  \[\|R(\lambda)\| \le \frac{1}{|\lambda|} \frac{1}{1 - \|x / \lambda\|} = \frac{1}{|\lambda| - \|x\|}\]
+  which converges to \(0\) as \(|\lambda| \to \infty\). Hence, \(R = 0\) by the vector valued Liouville's theorem 
+  which is a contradiction.
+\end{proof}
+
+\begin{corollary}[Gelfand-Mazur]
+  A complex unital normed division algebra (i.e. \(G(A) = A \setminus \{0\}\)) is isometrically isomorphic
+  to \(C\).
+\end{corollary}
+\begin{proof}
+  The map we want is
+  \[\theta : \mathbb{C} \to A : \lambda \mapsto \lambda 1.\]
+  It is clear that \(\theta\) is an isometric homomorphism. 
+  
+  For surjectivity, let \(B\) be a completion of \(A\), so \(B\) is a unital Banach algebra. Given 
+  \(x \in A\), by the previous theorem \(\sigma_B(x)\) is non-empty and so we may choose \(\lambda \in \sigma_B(x)\).
+  Then, \(\lambda 1 - x \not \in G(B)\) and so \(\lambda 1 - x \not \in G(A)\). However, as \(A\) is a 
+  division algebra, this means \(\lambda 1 - x = 0\) and so \(\theta(\lambda) = x\) as required.
+\end{proof}
+
+\begin{definition}[Spectral radius]
+  Let \(A\) be a Banach algebra and \(x \in A\). The spectral radius of \(x\) is defined to be 
+  \[r_A(x) := \sup \{|\lambda| \mid \lambda \in \sigma_A(x)\} \le \|x\|.\]
+\end{definition}
+
+\begin{lemma}
+  If \(A\) is a unital algebra, \(x, y \in A\) and \(xy = yx\), then 
+  \(x, y \in G(A)\) if and only if \(xy \in G(A)\).
+\end{lemma}
+\begin{proof}
+  Let \(b = (xy)^{-1}\), then, \((by)x = b(yx) = b(xy) = 1 = (xy)b = x(yb)\).
+\end{proof}
+
+\begin{lemma}[Polynomial spectral mapping theorem]
+  Let \(A\) be a unital Banach algebra and let \(x \in A\). Then, for any complex polynomial 
+  \(p(x) = \sum_{k = 0}^n a_k z^k\), we have 
+  \[\sigma_A(p(x)) = \{p(\lambda) \mid \lambda \in \sigma_A(x)\}.\] 
+\end{lemma}
+\begin{proof}
+  The lemma is clear for constant polynomials as \(\sigma_A(\lambda 1) = \{\lambda\}\).
+
+  Assume now \(n \ge 1\) and \(a_n \neq 0\). Then, fixing \(\mu \in \mathbb{C}\), we write 
+  \[\mu - p(z) = c \prod_{\gamma = 1}^n (\lambda_\gamma - z)\]
+  for some \(c \neq 0\), \(\lambda_1, \cdots, \lambda_n \in \mathbb{C}\). Then, by the above lemma,
+  \[\mu 1 - p(x) = c \prod_{\gamma = 1}^n (\lambda_\gamma 1 - x)\]
+  is invertible if and only if \(\lambda_\gamma 1 - x\) is invertible for all \(\gamma\). Thus, 
+  \(\mu \in \sigma_A(p(x))\) if and only if one of the \(\lambda_\gamma \in \sigma_A(x)\) which 
+  occurs if and only if \(p(\lambda_\gamma) = \mu\).
+\end{proof}
+
+\begin{theorem}[Beurling-Gelfand spectral radius formula]
+  Let \(A\) be a Banach algebra and let \(x \in A\). Then, 
+  \[r_A(x) = \lim_{n \to \infty}\|x^n\|^{1 / n} = \inf_n \|x^n\|^{1 / n}.\]
+\end{theorem}
+\begin{proof}
+  By unitization, we may assume \(A\) is unital. 
+
+  Observe that for \(\lambda \in \sigma_A(x)\), \(\lambda^n \in \sigma_A(x^n)\) (by polynomial 
+  spectral mapping) and so \(|\lambda^n| \le \|x^n\|\). Thus, \(|\lambda| \le \|x^n\|^{1 / n}\) and 
+  it follows that \(r_A(x) \le \inf_n \|x^n\|^{1 / n}\).
+
+  Consider again the resolvent operator
+  \[R : \{\lambda \in \mathbb{C} \mid |\lambda| > r_A(x)\} \to G(A) : \lambda \to (\lambda 1 - x)^{-1}.\]
+  We've previously shown \(R\) is holomorphic and hence, for any \(\phi \in A^*\), \(\phi \circ R\) 
+  has a Laurent expansion. In particular, for \(|\lambda| > \|x\| (\ge r_A(x))\), we have 
+  \[R(\lambda) = \frac{1}{\lambda}\left(1 - \frac{x}{\lambda}\right)^{-1} 
+    = \frac{1}{\lambda}\sum_{n = 0}^\infty \frac{x^n}{\lambda^n}.\]
+  Hence, 
+  \[\phi \circ R(\lambda) = \frac{1}{\lambda} \sum_{n = 0}^\infty \phi\left(\frac{x^n}{\lambda^n}\right)
+    = \sum_{n = 0}^\infty \frac{\phi(x^n)}{\lambda^{n + 1}}\]
+  implying \(\sum_{n = 0}^\infty \frac{\phi(x^n)}{\lambda^{n + 1}}\) is the Laurent expansion of \(\phi \circ R\).
+  Thus, for all \(\lambda \in \mathbb{R}\) with \(|\lambda| > r_A(x)\), \(\phi(x^n / \lambda^n) \to 0\) for
+  any \(\phi \in A^*\). With this, \(\{x^n / \lambda^n \mid n \in \mathbb{N}\}\) is weakly bounded and hence 
+  is bounded in norm by some constant \(M\). Then, for all \(n\), \(\|x^n / \lambda^n\| \le M\) and so, 
+  \[\|x^n\|^{1 / n} \le M^{1 / n}|\lambda| \text{ implying } \limsup \|x^n\|^{1 / n} \le |\lambda|\]
+  for every \(\lambda\) satisfying \(|\lambda| > r_A(x)\). Thus, we have 
+  \[r_A(x) \le \inf \|x^n\|^{1 / n} \le \liminf \|x^n\|^{1 / n} \le \limsup \|x^n\|^{1 / n} \le r_A(x).\] 
+\end{proof}
+
+\begin{theorem}
+  Let \(A\) be a unital Banach algebra and \(B\) a unital subalgebra of \(A\). Then, given \(x \in B\), 
+  \[\sigma_B(x) \supseteq \sigma_A(x) \text{ and } \partial \sigma_B(x) \subseteq \partial \sigma_A(x).\]
+  It follows that \(\sigma_B(x)\) is the union of \(\sigma_A(x)\) with some of the bounded components 
+  of \(\mathbb{C} \setminus \sigma_A(x)\).
+\end{theorem}
+\begin{proof}
+  If \(\lambda \not\in \sigma_B(x)\), then \(\lambda 1 - x \in G(B)\) and so, \(\lambda 1 - x \in G(A)\) 
+  implying \(\lambda \not\in \sigma_A(x)\). 
+
+  On the other hand, let us take \(\lambda \in \partial \sigma_B(x)\) (\(\lambda \in \sigma_B(x)\) as 
+  \(\sigma_B(x)\) is compact and hence closed). So, choosing 
+  \((\lambda_n) \subseteq \mathbb{C} \setminus \sigma_B(x) \subseteq \mathbb{C} \setminus \sigma_A(x)\) such that \(\lambda_n \to \lambda\), 
+  it suffices to show that \(\lambda \in \sigma_A(x)\).
+
+  Observe that \(\lambda_n 1 - x \in G(B) \subseteq G(A)\) for all \(n\) and 
+  \(\lambda_n 1 - x \to \lambda 1 - x \not\in G(B)\). Namely, \(\lambda 1 - x \in \partial G(B)\). 
+  Thus, if \(\lambda 1 - x \in G(A)\), by the continuity of the inverse, 
+  \[(\lambda_n 1 - x)^{-1} \to (\lambda 1 - x)^{-1}.\]
+  However, as \((\lambda_n 1 - x)^{-1} \in B\), and \(B\) is closed, it follows \((\lambda 1 - x)^{-1} \in B\) 
+  contradicting \(\lambda 1 - x \not\in G(B)\). Hence, \(\lambda 1 - x \not\in G(A)\) implying 
+  \(\lambda \in \sigma_A(x)\) as required. 
+\end{proof}
+
+\begin{proposition}
+  Let \(A\) be a unital Banach algebra and \(C\) a maximal commutative subalgebra of \(A\). Then \(C\)
+  is closed, unital and for all \(x \in C\), we have \(\sigma_A(x) = \sigma_C(x)\).  
+\end{proposition}
+\begin{proof}
+  As multiplication is continuous, it follows \(\overline{C}\) is also a commutative subalgebra. Thus, 
+  for \(C\) to be maximal, \(C = \overline{C}\) implying \(C\) is closed. \(C\) is unital as 1 commutes 
+  with all elements of \(C\) and so can always be added in to create a larger commutative subalgebra.
+
+  Fix \(x \in C\). We already know \(\sigma_C(x) \supseteq \sigma_A(x)\). Now, for \(\lambda \not\in \sigma_A(x)\), 
+  there exists some \(y \in A\), 
+  \[y(\lambda 1 - x) = (\lambda 1 - x)y = 1.\]
+  On the other hand, as \(\lambda 1 - x \in C\), it commutes with any \(z \in C\). Thus, 
+  \[yz = yz(\lambda 1 - x)y = y(\lambda 1 - x)zy = zy\]
+  implying \(y \in C\) by maximality. Thus \(\lambda \not\in \sigma_C(x)\) as required.
+\end{proof}
+
+\subsection{Commutative Banach algebra}
+
+\end{document}
+
+

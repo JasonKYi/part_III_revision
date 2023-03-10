@@ -1,0 +1,220 @@
+\documentclass[]{article}
+\usepackage{amsmath}
+\usepackage[bitstream-charter]{mathdesign}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+\hypersetup{
+  pdftitle={Information Theory Condensed Notes},
+  pdfauthor={Kexing Ying},
+  colorlinks=true,
+  linkcolor=Maroon,
+  filecolor=Maroon,
+  citecolor=Maroon,
+  urlcolor=Maroon,
+  pdfcreator={LaTeX via pandoc}}
+
+\usepackage[margin = 1.5in]{geometry}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+
+\usepackage{tikz}
+\usepackage{physics}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{parskip}
+
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem*{definition}{Definition}
+\newtheorem*{lemma}{Lemma}
+\newtheorem*{proposition}{Proposition}
+\newtheorem*{example}{Example}
+\newtheorem*{remark}{Remark}
+
+\setlength\parindent{0pt}
+\title{Information Theory Condensed Notes}
+\author{Kexing Ying}
+
+\begin{document}
+\maketitle
+
+\section*{Basic Definitions and Properties}
+
+We always work in logarithmic base 2 unless explicitly stated otherwise (e.g. \(\log_e\) denotes the natural logarithm).
+
+\begin{definition}[Entropy]
+  Given a random variable \(X\) on some finite space \(\mathscr{A}\), denoting \(P\) the probability mass function of \(X\), 
+  \(X\) has entropy 
+  \[H(X) = H(P) := - \sum_{x \in \mathscr{A}} P(x) \log P(x) = \mathbb{E}[-\log P(X)].\]
+  By convention we take \(0\log 0 := 0\)
+\end{definition}
+
+\begin{proposition}[Bernoulli entropy]
+  If \(X \sim \text{Bern}(p)\) then \(H(X) = -p\log p - (1 - p)\log (1 - p)\).
+\end{proposition}
+
+
+\begin{definition}[Fixed-rate code]
+  A fixed-rate lossless compression code for a source \((X_n)\) (always iid.) on \(\mathscr{A}\) is a sequence 
+  of codebooks \(B_n \subseteq \mathscr{A}^n\). 
+
+  The idea of a compression using a fixed-rate code is to index the codebooks using \(\lceil\log |B_n|\rceil\) bits.
+  Then to transmit \(x_1^n \in \mathscr{A}^n\), if \(x_1^n \in B_n\), we transmit 1 postfixed with the index 
+  corresponding to \(x_1^n\) in \(B_n\). This costs \(1 + \lceil \log|B_n|\rceil\) bits. On the other 
+  hand if \(x_1^n \not\in B_n\), we transmit 0 and the entire string \(x_1^n\). This costs 
+  \(1 + \lceil \log|\mathscr{A}^n|\rceil 1 + \lceil n\log|\mathscr{A}|\rceil\) bits.
+\end{definition}
+
+\begin{definition}[Rate and error probability]
+  Given a fixed-rate code \(B_n\) for the source \((X_n)\), the rate of the code is defined as 
+  \[R_n = \frac{1}{n}(1 + \lceil\log|B_n|\rceil),\]
+  and its probability of error is 
+  \[P_e^{(n)} = \mathbb{P}(X_1^n \not\in B_n).\]
+\end{definition}
+
+\begin{definition}[Relative entropy]
+  The relative entropy of the pmfs \(P, Q\) on \(\mathscr{A}\) is 
+  \[D(P \| Q)= \sum_{x \in \mathscr{A}}P(x) \log\frac{P(x)}{Q(x)} = 
+  \mathbb{E}\left[\log\frac{P(X)}{Q(X)}\right],\]
+  for some random variable \(X \sim P\). Again we introduce the convention 
+  \(0\log 0 = 0, 0 \log \frac{0}{0} = 0\).
+\end{definition}
+
+\begin{theorem}[Log-sum inequality]
+  For non-negative constants \(a_1, \cdots, a_n\) and \(b_1, \cdots, b_n\),
+  \[\sum_{i = 1}^n a_i\log\frac{a_i}{b_i} \ge \left(\sum_{i = 1}^n a_i\right) \log \frac{\sum_{i = 1}^n a_i}{\sum_{i = 1}^n b_i}.\]
+  Equality is achieved if and only if \(a_i / b_i\) is some fixed constant.
+\end{theorem}
+
+\begin{proposition}
+  Let \(P, Q\) be two pmfs on \(\mathscr{A}\), then 
+  \begin{itemize}
+    \item \(0 \le H(P) \le \log|\mathscr{A}|\) and \(H(P) = 0\) if and only if \(P\) is a Dirac measure
+      and \(H(P) = \log|\mathscr{A}|\) if and only if \(P\) is uniform.
+    \item \(D(P \| Q) \ge 0\) with equality if and only if \(P = Q\).
+  \end{itemize}
+\end{proposition}
+
+\begin{definition}[Conditional entropy]
+  Given \(X, Y\) random variables on \(\mathscr{A}\) with joint pmf \(P_{XY}\), the conditional entropy 
+  of \(X\) given \(Y\) is 
+  \[H(Y \mid X) = -\sum_{x,y \in \mathscr{A}} P_{XY}(x, y) \log P_{Y \mid X(y \mid x)}= \mathbb{E}[-\log P_{Y \mid X}(Y \mid X)]\]
+  where \(P_{Y \mid X}(y \mid x) = \frac{P_{XY}(x, y)}{P_X(x)}\).
+\end{definition}
+
+\begin{proposition}
+  Given \(X, Y, Z\) random variables and \((X_n), (Y_n)\) sequences of random variables (not necessary independent) on 
+    \(\mathscr{A}\),
+  \begin{itemize}
+    \item \(H(X, Y) = H(X) + H(Y \mid X)\);
+    \item \(H(Y \mid X) \le H(Y)\) with equality if and only if \(X\) and \(Y\) are independent;
+    \item \(H(f(X)) \le H(X)\) with equality if and only if \(f\) is bijective;
+    \item \(H(f(X) \mid X) = 0\);
+    \item \(H(X, Z \mid Y) = H(X \mid Y) + H(Z \mid X, Y)\);
+    \item \(H(X, Z \mid Y) \le H(X \mid Y) + H(Z \mid Y)\) with equality if and only if \(X\) and 
+      \(Z\) are conditionally independent given \(Y\);
+    \item \(H(X \mid Y, Z) \le H(X \mid Y)\) with equality if and only if \(X\) and \(Z\) are 
+      conditionally independent given \(Y\);
+    \item \(H(X_1^n) = \sum_{i = 1}^n H(X_i \mid X_1^{i - 1}) = H(X_1) + H(X_2 \mid X_1) + \cdots + H(X_n \mid X_1^{n - 1})\);
+    \item \(H(X_1^n) \le \sum_{i = 1}^n H(X_i)\) with equality if and only if \((X_n)\) is independent;
+    \item if \(f : \mathscr{A} \to \mathscr{B}\) be some function, \(D(P_{f(X)} \| P_{f(Y)}) \le D(P_X \| P_Y)\);
+  \end{itemize}
+\end{proposition}
+
+\begin{definition}[Total variation]
+  The total variation of two pmfs \(P, Q\) on \(\mathscr{A}\) is 
+  \[\|P - Q\|_{\text{TV}} := \sum_{x \in \mathscr{A}} |P(x) - Q(x)|.\]
+\end{definition}
+
+\begin{proposition}
+  \(D(P \| Q)\) is jointly convex in \(P, Q\), i.e. for pmfs \(P_i, Q_i, i = 1, 2\) and \(\lambda \in (0, 1)\),
+  \[D(\lambda P_1 + (1 - \lambda) P_2 \| \lambda Q_1 + (1 - \lambda) Q_2) \le \lambda D(P_1 \| Q_1) + (1 - \lambda) D(P_2 \| Q_2).\]
+\end{proposition}
+
+\begin{proposition}
+  \(H(P)\) is concave in \(P\), i.e. for pmfs \(P_i, i = 1, 2\) and \(\lambda \in (0, 1)\),
+  \[H(\lambda P_1 + (1 - \lambda) P_2) \ge \lambda H(P_1) + (1 - \lambda) H(P_2).\]
+\end{proposition}
+
+\section*{Named theorems}
+
+\begin{proposition}[Asymptotic equipartition property (AEP)]
+  Given \((X_n)\) a iid. sequence of random variables on \(\mathscr{A}\) finite with pmf \(P\) and 
+  entropy \(H = H(X_i)\), then 
+  \begin{itemize}
+    \item for all \(\epsilon > 0\), defining the set of typical strings 
+    \[B_n^* := \{2^{-n(H + \epsilon)} \le P^n(x_1^n) \le 2^{-n(H - \epsilon)}\} \subseteq \mathscr{A}^n,\]
+    \(B_n^*\) satisfies \(|B_n^*| \le 2^{n(H + \epsilon)}\) and \(\mathbb{P}(X_1^n \in B_n^*) = P^n(B_n^*) \to 1\).
+    \item for all sequences of sets \(B_n \subseteq \mathscr{A}^n\) satisfying \(\mathbb{P}(X_1^n \in B_n) \to 1\), 
+    given \(\epsilon > 0\), we have \(|B_n| \ge (1 - \epsilon)2^{n(H - \epsilon)}\) eventually.
+  \end{itemize}
+\end{proposition}
+
+\begin{proposition}[Fixed-rate coding]
+  Given the source \((X_n)\) on \(\mathscr{A}\) with pmf \(P\) and entropy \(H\), 
+  \begin{itemize}
+    \item for all \(\epsilon > 0\), there exists a fixed-rate code \((B_n^*)\) with \(P_e^{(n)} \to 0\) 
+    and 
+    \[R_n \le H + \epsilon + \frac{2}{n}.\]
+    \item for all fixed-rate code \((B_n)\) with \(P_e^{(n)} \to 0\), for any \(\epsilon\), \(B_n\) 
+    has rate eventually satisfying 
+    \[R_n > H - \epsilon.\] 
+  \end{itemize}
+\end{proposition}
+
+\begin{proposition}[Stein's lemma]
+  Suppose \((X_n)\) is a sequence of iid. random variables on \(\mathscr{A}\) and \(P, Q\) are two pmfs 
+  on \(\mathscr{A}\). Then, given a sequence of sets \(B_n \subseteq \mathscr{A}^n\) of decision regions, 
+  we denote the probability of errors  
+  \[e_1^{(n)} = \mathbb{P}(X_1^n \in B_n \mid X_i \sim Q), \text{ and } 
+    e_2^{(n)} = \mathbb{P}(X_1^n \not\in B_n \mid X_i \sim P).\]
+  Then,
+  \begin{itemize}
+    \item for all \(\epsilon > 0\), there exists decision regions \((B_n^*)\) such that for all \(n\)
+      \[e^{(n)}_1 \le 2^{-n(D(P \| Q) -\epsilon)} \text{ and } \lim_{n \to \infty} e_2^{(n)} = 0.\]
+    \item if \((B_n)\) are decision regions such that \(e_2^{(n)} \to 0\) as \(n \to \infty\), then 
+      for all \(\epsilon > 0\), 
+      \[e_1^{(n)} \ge 2^{-n(D + \epsilon + n^{-1})}.\] 
+  \end{itemize}
+\end{proposition}
+
+\begin{proposition}[Neyman-Pearson lemma]
+  For \(P, Q\) pmfs on \(\mathscr{A}\) and \(x_1^n \in \mathscr{A}^n\) we define the Neyman-Pearson 
+  decision region
+  \[B_{\text{NP}} := \left\{\frac{P^n(x_1^n)}{Q^n(x_1^n)} \ge T\right\}\]
+  for some threshold \(T > 0\) with probability of error \(e_{1, \text{NP}}^{(n)} = Q^n(B_{\text{NP}})\)
+  and \(e_{2, \text{NP}}^{(n)} = P^n(B_{\text{NP}^c})\). Then, for any other decision region \(B_n \subseteq \mathscr{A}^n\),
+  such that \(e_2^{(n)} \le e_{2, \text{NP}}^{(n)}\), we have \(e_1^{(n)} \ge e_{1, \text{NP}}^{(n)}\).
+\end{proposition}
+
+\begin{proposition}
+  The Neyman-Pearson decision region \(B_{\text{NP}}\) can also be expressed in terms of relative entropy as 
+  \[B_{\text{NP}} = \{D(\hat{P}_n \| Q) \ge D(\hat{P}_n \| P) + T'\}\]
+  where \(T' = \frac{1}{n} \log T\).
+\end{proposition}
+
+\begin{proposition}[Fano's inequality]
+  Given \(X, Y\) random variables taking value in \(\mathscr{A}\) and \(\mathscr{B}\) respectively, and 
+  \(f : \mathscr{B} \to \mathscr{A}\) is som function, we have
+  \[H(X \mid Y) \le h(P_e) + P_e\log (|\mathscr{A}| - 1),\]
+  where \(h\) is the Bernoulli entropy and \(P_e := \mathbb{P}(f(Y) \neq X)\).
+\end{proposition}
+
+\begin{proposition}[Pinsker's inequality]
+  Given two pmfs \(P, Q\) on \(\mathscr{A}\), 
+  \[\|P- Q\|_{\text{TV}}^2 \le (2\log_e 2) D(P \| Q).\] 
+\end{proposition}
+
+\end{document}

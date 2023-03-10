@@ -1,0 +1,116 @@
+\documentclass[]{article}
+\usepackage{amsmath}
+\usepackage[bitstream-charter]{mathdesign}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+\hypersetup{
+  pdftitle={Advanced Probability Revision},
+  pdfauthor={Kexing Ying},
+  colorlinks=true,
+  linkcolor=Maroon,
+  filecolor=Maroon,
+  citecolor=Maroon,
+  urlcolor=Maroon,
+  pdfcreator={LaTeX via pandoc}}
+
+\usepackage[margin = 1.5in]{geometry}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+
+\usepackage{tikz}
+\usepackage{physics}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{parskip}
+
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem*{definition}{Definition}
+\newtheorem*{lemma}{Lemma}
+\newtheorem*{proposition}{Proposition}
+\newtheorem*{example}{Example}
+\newtheorem*{remark}{Remark}
+
+\setlength\parindent{0pt}
+\title{Advanced Probability Revision}
+\author{Kexing Ying}
+
+\begin{document}
+\maketitle
+
+\section*{Martingale}
+
+Regarding the optional stopping theorem, it is useful to write the stopped value of a process as 
+the following: 
+\[X_T = X_0 + \sum_{k = 0}^\infty (X_k - X_{k - 1})\mathbb{1}_{\{T \ge k\}}.\]
+The stopped process is useful to bound the stopped value should one be able to find an applicable 
+rule such that 
+\[\mathbb{E}[X_T] = \mathbb{E}\left[\lim_{n \to \infty} X_{T \wedge n}\right] 
+  = \lim_{n \to \infty} \mathbb{E}[X_{T \wedge n}].\]
+
+
+\section*{Brownian motion}
+
+\begin{definition}[Brownian motion]
+  A continuous stochastic process \((B_t)_{t \ge 0}\) is a Brownian motion in \(\mathbb{R}^n\) if 
+  \begin{itemize}
+    \item \(B_0 = x\) a.e. for some constant \(x \in \mathbb{R}^n\);
+    \item \(B_t - B_s \sim \mathcal{N}(0, (t - s)\text{id}_n)\) for all \(s < t\);
+    \item \((B_t)_t\) has independent increments which are also independent of \(B_0\).
+  \end{itemize}
+  if \(x = 0\) we say the Brownian motion is standard.
+\end{definition}
+
+\begin{proposition}
+  The standard Brownian motion in \(\mathbb{R}^n\) is the unique Gaussian process \((B_t)_t\)
+  (i.e. \((B_{t_1}, \cdots, B_{t_k})\) is a Gaussian random vector) satisfying 
+  \(\mathbb{E}[B_t] = 0\) and \(\text{Cov}(B_s, B_t) = (s \wedge t) \text{id}_n\) for all \(s, t \ge 0\).
+\end{proposition}
+
+\begin{proposition}
+  A Brownian motion does not reach its maximum almost surely, i.e. for any \(t > 0\), the event 
+  \(\{B_t = \sup_{0 \le s \le t} B_s\}\) is a null-set.
+\end{proposition}
+\begin{proof}
+  Fix \(t > 0\) and we observe 
+  \[B_t = \sup_{0 \le s \le t} B_s \iff 
+    \inf_{0 \le s \le t} (B_t - B_s) \ge 0 \iff 
+    \inf_{0 \le s \le t} (B_t - B_{t - s}) \ge 0.\]
+  Now, it is clear that \((B_t - B_{t - s})_{s \in [0, 1]}\) is a standard Brownian motion and thus, 
+  the right hand side occurs with probability 0 proving the claim.
+\end{proof}
+
+To show a random time is \textit{not} a stopping time, one may invoke the strong Markov property of 
+Brownian motions. Namely, if we want to show \(T\) is not a stopping time it suffices to show 
+\((B_{T + t} - B_T)_t\) is not a Brownian motion.
+
+\begin{proposition}
+  A Brownian motion is \(\alpha\)-Hölder continuous for all \(\alpha < 1 / 2\).
+\end{proposition}
+\begin{proof}
+  By continuity, it suffices to show Hölder continuity on the Dyadic numbers for which we invoke the 
+  Kolmogorov's continuity criterion. Namely, if for all \(s, t \in \mathcal{D}\),
+  \[\mathbb{E}[|B_s - B_t|^p] \le c|s - t|^{1 + \epsilon}\]
+  for some constant \(c\), then \((B_t)\) is \(\alpha\)-Hölder continuous on \(\mathcal{D}\) for all 
+  \(\alpha \in (0, \epsilon / p)\). To show this we observe that (WLOG. \(s < t\)) 
+  \(B_t - B_s \sim \mathcal{N}(0, (t - s)\text{id}_n)\) and so, 
+  \[\mathbb{E}[|B_t - B_s|^p] \le \mathbb{E}[|Z|^p] |t - s|^{p / 2},\]
+  where \(Z \sim \mathcal{N}(0, 1)\). Hence, as \(\mathbb{E}[|Z|^p] < \infty\) for all \(p\), we have 
+  \((B_t)\) is \(\alpha\)-Hölder continuous for all \(\alpha \in \left(0, \frac{p / 2 - 1}{p}\right)
+  = \left(0, \frac{1}{2} - \frac{1}{p}\right)\). Finally, for all \(\alpha < 2\), there exists some 
+  \(p\) such that \(\frac{1}{2}-\frac{1}{p} > \alpha\) and so, \((B_t)\) is \(\alpha\)-Hölder continuous.
+\end{proof}
+
+\end{document}
