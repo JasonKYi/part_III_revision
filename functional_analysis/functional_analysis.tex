@@ -1435,9 +1435,72 @@ have \(\mathcal{O}(K) = \mathcal{P}(K)\).
 
 \subsection{Vector-valued integration}
 
+Let \(a < b\) be in \(\mathbb{R}\), \(X\) a Banach space, \(f : [a, b] \to X\) a continuous function.
+We define the integral of \(f\) over \([a, b]\) as follows:
 
+Take sequences \(\mathcal{D}_n\): \(a = t_0^{(n)} < t_1^{(n)} < \cdots < t_{k_n}^{(n)} = b\)
+such that \(|\mathcal{D}_n| =  \max_{1 \le j \le k_n} |t_j^{(n)} - t_{j - 1}^{(n)}| \to 0\) as 
+\(n \to \infty\).
+
+Since \(f\) is continuous on a compact set, it is uniformly continuous and so the limit 
+\[\lim_{n \to \infty} \sum_{j = 1}^{k_n}f(t_j^{(n)})(t_j^{(n)} - t_{j - 1}^{(n)})\]
+exists and is independent of the choice of \(\mathcal{D}_n\). We denote this limit by 
+\(\int_a^b f(t) \dd t\).
+
+We note that for \(\phi \in X^*\), 
+\[\phi\left(\int_a^b f(t) \dd t\right) = \int_a^b \phi(f(t)) \dd t.\]
+If \(\phi\) is the norming functional of \(\int_a^b f(t) \dd t\), then 
+\[\left\|\int_a^b f(t) \dd t\right\| = \phi\left(\int_a^b f(t) \dd t\right) = 
+  \int_a^b \phi(f(t)) \dd t \le \int_a^b \|\phi\|\|f(t)\| \dd t = \int \|f(t)\| \dd t.\]
+
+Next, let \(\gamma : [a, b] \to \mathbb{C}\) be a path (i.e. \(\gamma\) continuously differentiable) 
+and \(f : [\gamma] \to X\) a continuous function (\([\gamma] = \gamma([a, b])\)). Define 
+\[\int_\gamma f(z) \dd z = \int_a^b f(\gamma(t)) \gamma'(t) \dd t.\]
+For a chain \(\Gamma = (\gamma_1, \cdots, \gamma_n)\) and \(f : [\Gamma] \to X\) (where 
+\([\Gamma] = \bigcup_{i = 1}^n [\gamma_i]\)), we define 
+\[\int_\Gamma f(z) \dd z = \sum_{i = 1}^n \int_{\gamma_i} f(z) \dd z.\]
+From this, we observe 
+\[\left\|\int_\Gamma f(z) \dd z \right\| \le \sum_{i = 1}^n \left\|\int_{\gamma_i} f(z) \dd z\right\|
+  \le l(\Gamma) \sup_{z \in \Gamma} \|f(z)\|\]
+where \(l(\Gamma)\) denotes the length of \(\Gamma\), i.e. \(l(\Gamma) = \sum_{i = 1}^n l(\gamma_i)\)
+where \(l(\gamma) = \int_a^b |\gamma'(t)| \dd t\) for any path \(\gamma\).
 
 \subsection{Proof of HFC}
+
+\begin{theorem}[Vector valued Cauchy theorem]
+  Let \(U \subseteq \mathbb{C}\) be an open set, \(\Gamma\) a cycle in \(U\) such that 
+  \(n(\Gamma, \omega) = 0\) for all \(\omega \not\in U\). Then, for a holomorphic function 
+  \(f : U \to X\), we have 
+  \[\int_\Gamma f(z) \dd z = 0.\]
+\end{theorem}
+\begin{proof}
+  Indeed, for all \(\phi \in X^*\), 
+  \[\phi\left(\int_\Gamma f(z) \dd z\right) = \int_\Gamma \phi(f(z)) \dd z = 0\]
+  as \(\phi \circ f\) is holomorphic. Hence, the result follows by Hahn-Banach.
+\end{proof}
+
+\begin{lemma}
+  Let \(A\) be a unital Banach algebra and \(x \in U \subseteq \mathbb{C}\) for some non-empty open 
+  set \(U\). Furthermore, denote \(K = \sigma_A(x)\). Then, for a cycle \(\Gamma\) in \(U \setminus K\), 
+  with 
+  \[n(\Gamma, \omega) =
+    \begin{cases}
+    1, & \omega \in K,\\
+    0, & \omega \not\in K,
+  \end{cases}\]
+  defining 
+  \[\Theta_x : \mathcal{O}(U) \to A, f \mapsto \frac{1}{2\pi i} \int_\Gamma f(z)(z1 - x)^{-1} \dd z,\]
+  then \(\Theta_x\) is well-defined, linear and continuous. Furthermore, 
+  \begin{itemize}
+    \item For a rational function \(r\) without poles in \(U\), we have \(\Theta_x(r) = r(x)\). 
+    \item For all \(\phi \in \Phi_A\) and \(f \in \mathcal{O}(Y)\), 
+      \[\phi(\Theta_x f) = f(\phi(x)) \text{ and } \sigma_A(\Theta_x(f)) = f(\sigma_A(x)).\] 
+  \end{itemize}
+\end{lemma}
+
+We remark that the above lemma is not quite HFS. Indeed, it is missing the condition that \(\Theta_x\) 
+is multiplicative.
+
 
 \end{document}
 
