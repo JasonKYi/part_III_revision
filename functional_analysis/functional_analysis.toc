@@ -12,3 +12,6 @@
 \contentsline {subsection}{\numberline {3.2}Constructions}{20}{subsection.3.2}%
 \contentsline {subsection}{\numberline {3.3}Spectrum}{23}{subsection.3.3}%
 \contentsline {subsection}{\numberline {3.4}Commutative Banach algebra}{26}{subsection.3.4}%
+\contentsline {section}{\numberline {4}Holomorphic Functional Calculus}{29}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Vector-valued integration}{29}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Proof of HFC}{29}{subsection.4.2}%
