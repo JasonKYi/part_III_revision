@@ -784,8 +784,8 @@ separates points of \(X\) and so the weak topology is Hausdorff. As before, a su
 is weakly open iff for all \(x \in U\), there exists \(f_1, \cdots, f_n \in X^*\) and \(\epsilon > 0\) 
 such that
 \[\{y \in X \mid |f_i(y - x)| < \epsilon, i = 1, \cdots, n\} \subseteq U.\]
-Now, by identifying \(X\) in \((X^*)^*\) by the canonical embedding, we define the weak-* topology 
-on \(X^*\) by \(w^* := \sigma(X^*, X)\). A subset \(U \subseteq X^*\) is weak-* open iff for all
+Now, by identifying \(X\) in \((X^*)^*\) by the canonical embedding, we define the weak-\(*\) topology 
+on \(X^*\) by \(w^* := \sigma(X^*, X)\). A subset \(U \subseteq X^*\) is weak-\(*\) open iff for all
 \(f \in U\), there exists \(x_1, \cdots, x_n \in X\) and \(\epsilon > 0\) such that
 \[\{g \in X^* \mid |g(x_i) - f(x_i)| < \epsilon, i = 1, \cdots, n\} \subseteq U.\]
 
@@ -800,7 +800,7 @@ on \(X^*\) by \(w^* := \sigma(X^*, X)\). A subset \(U \subseteq X^*\) is weak-* 
     \item if \(Y \le X\), then 
       \[\sigma(X, X^*)|_Y = \sigma(Y, \{f|_Y \mid f \in X^*\}) = \sigma(Y, Y^*)\]
       where the last equality follows by Hahn-Banach.
-    \item The canonical embedding \(X \to (X^*)^*\) is a w-to-w* homeomorphism between \(X\) 
+    \item The canonical embedding \(X \to (X^*)^*\) is a w-to-w\(^*\) homeomorphism between \(X\) 
       and \(\hat X\).
   \end{itemize}
 \end{proposition}
@@ -809,14 +809,14 @@ on \(X^*\) by \(w^* := \sigma(X^*, X)\). A subset \(U \subseteq X^*\) is weak-* 
   Let \(X\) be a normed space. Then,
   \begin{itemize}
     \item a linear functional \(f\) on \(X\) is weakly continuous iff \(f \in X^*\).
-    \item a linear functional \(\phi\) on \(X^*\) is weak-* continuous iff \(\phi \in \hat X\).
+    \item a linear functional \(\phi\) on \(X^*\) is weak-\(*\) continuous iff \(\phi \in \hat X\).
     \item \(\sigma(X^*, X) = \sigma(X^*, (X^*)^*)\) iff \(X\) is reflexive.
   \end{itemize}
 \end{proposition}
 \begin{proof}
   The only slightly non-trivial part is the forward direction of the third statement. But this is 
   also straight forward. Let \(\phi \in (X^*)^*\), we need to show \(\phi \in \hat X\). 
-  Since \(\sigma(X^*, X) = \sigma(X^*, (X^*)^*)\), \(f\) is weak-* continuous and the result follows 
+  Since \(\sigma(X^*, X) = \sigma(X^*, (X^*)^*)\), \(f\) is weak-\(*\) continuous and the result follows 
   by the second claim.
 \end{proof}
 
@@ -840,7 +840,7 @@ We recall the principle of uniformly boundedness (PUB).
   If \(X\) is a normed space, 
   \begin{itemize}
     \item if \(A \subseteq X\) is weakly bounded, then \(A\) is \(\|\cdot\|\)-bounded.
-    \item if \(X\) is in addition complete, then if \(B \subseteq X^*\) is w*-bounded, then 
+    \item if \(X\) is in addition complete, then if \(B \subseteq X^*\) is w\(^*\)-bounded, then 
       \(B\) is \(\|\cdot\|\)-bounded.
   \end{itemize}
 \end{proposition}
@@ -852,7 +852,7 @@ We recall the principle of uniformly boundedness (PUB).
   \(\sup_{x \in A} \|x\| = \sup_{\hat x \in \hat A} \|\hat x\| < \infty\) 
   as required. 
   
-  On the other hand, if \(X\) i complete and \(B \subseteq X^*\) is w*-bounded, then 
+  On the other hand, if \(X\) i complete and \(B \subseteq X^*\) is w\(^*\)-bounded, then 
   we may directly apply PUB to obtain the bound in \(\|\cdot\|\) as required.
 \end{proof}
 
@@ -1349,7 +1349,7 @@ Let \(A\) be a commutative unital Banach algebra. Then, we may write
   \Phi_A & = \{\phi \in B_{A^*} \mid \phi(1) = 1, \phi(xy) = \phi(x)\phi(y),\ \forall x, y \in A\}\\
     & = B_{A^*} \cap \hat{1}^{-1}(1) \cap \bigcap_{x, y \in A} (\hat{xy} - \hat{x} \hat{y})^{-1}(0).
 \end{align*}
-which is a w*-closed subset of \(A\). So, \(\Phi_A\) is a \textit{compact} Hausdorff space in the w*-topology
+which is a w\(^*\)-closed subset of \(A\). So, \(\Phi_A\) is a \textit{compact} Hausdorff space in the w\(^*\)-topology
 and this topology is known as the Gelfand topology. We call \(\Phi_A\) equipped with the Gelfand 
 topology the spectrum of \(A\).
 
@@ -1603,6 +1603,96 @@ is multiplicative.
 \newpage
 \section{\texorpdfstring{\(C^*\)-algebra}{C*-algebra}}
 
+\begin{definition}[\(*\)-algebra]
+  A \(*\)-algebra is a complex algebra \(A\) with an involution operation, that is, a map 
+  \[A \to A : x \mapsto x^*\]
+  such that 
+  \begin{itemize}
+    \item \((\lambda x + \mu y)^* = \bar \lambda x^* + \bar \mu y^*\) for all \(\lambda, \mu \in \mathbb{C}\) and
+      \(x, y \in A\),
+    \item \((xy)^* = y^* x^*\) for all \(x, y \in A\),
+    \item \((x^*)^* = x\) for all \(x \in A\).
+  \end{itemize}
+  If \(A\) is in addition unital, then \(1^* = 1\) and hence \(1^* = 1\).
+\end{definition}
+
+\begin{definition}[\(C^*\)-algebra]
+  A \(C^*\)-algebra \(A\) is a Banach algebra with an involution such that the \(C^*\) equation holds: 
+  \[\|x^*x\| = \|x\|^2\]
+  for all \(x \in A\).
+
+  Namely, a \(C^*\) is a \(*\)-algebra with a complete algebra norm satisfying the \(C^*\) equation. 
+  Such a norm is called a \(C^*\)-norm.
+\end{definition}
+
+We remark that \(\|x^*\| = \|x\|\) since \(\|x^*\| \|x\| \ge \|x^*x\| = \|x\|^2\) implying 
+\(\|x\| \le \|x^*\|\) while \(\|x\| = \|(x^*)^*\| \le \|x^*\|\). Thus, the involution operation is 
+continuous and isometric.
+
+\begin{definition}
+  A Banach-\(*\)-algebra \(A\) is a Banach algebra with an involution such that for all \(x \in A\), 
+  \(\|x\| = \|x^*\|\).
+\end{definition}
+
+If \(A\) is a \(C^*\)-algebra with multiplicative unit \(1 \ne 0\), then \(\|1\| = 1\) since 
+\(\|1\| = \|1^* 1\| = \|1\|^2\).
+
+\begin{definition}
+  A \(*\)-subalgebra of a \(*\)-algebra \(A\) is a subalgebra which is closed under involution.
+\end{definition}
+
+\begin{definition}
+  A closed \(*\)-subalgebra of a \(C^*\)-algebra is a \(C^*\)-subalgebra.
+\end{definition}
+
+Since the closure of a \(*\)-subalgebra is also a \(*\)-subalgebra, it is a \(C^*\)-subalgebra.
+
+\begin{definition}
+  A algebra homomorphism \(\theta : A \to B\) between \(*\)-algebras is a \(*\)-homomorphism 
+  if for all \(x \in A\), \(\theta(x^*) = \theta(x)^*\). A \(*\)-isomorphism is a bijective 
+  \(*\)-homomorphism.
+\end{definition}
+
+\begin{example}
+  \(C(K)\) for \(K\) a compact Hausdorff space is a commutative unital \(C^*\)-algebra with the involution 
+  \(f^*(z) = \overline{f(z)}\).
+\end{example}
+
+\begin{example}
+  Given a Hilbert space \(H\), the space of bounded linear maps from \(H\) to itself \(\mathcal{B}(H)\) 
+  with the involution \(T \mapsto T^*\) where \(T^*\) it the adjoint of \(T\) is a unital \(C^*\)-algebra.
+\end{example}
+
+\begin{example}
+  Any \(C^*\)-subalgebra of \(\mathcal{B}(H)\) is obviously a \(C^*\)-algebra. However, it turns out 
+  that any \(C^*\)-algebra is isometrically \(*\)-isomorphic to a \(C^*\)-subalgebra of \(\mathcal{B}(H)\) 
+  for some Hilbert space \(H\). This is the Gelfand-Naimark theorem.
+\end{example}
+
+From now on, we will always take \(A\) to be a \(C^*\) algebra.
+
+\begin{definition}
+  For \(x \in A\), we say it is
+  \begin{itemize}
+    \item hermitian (or self-adjoint) if \(x^* = x\),
+    \item unitary if \(A\) is unital and \(x^*x = x x^* = 1\),
+    \item normal if \(x^*x = x x^*\).
+  \end{itemize}
+\end{definition}
+
+\begin{example}
+  If \(A\) is unital, then 1 is hermitian and unitary. In general, both hermitian and unitary elements 
+  are normal.
+\end{example}
+
+In \(C(K)\), \(f \in C(K)\) is hermitian if and only if \(f(K) \subseteq \mathbb{R}\) and it is 
+unital if and only if \(f(K) \subseteq \mathbb{T} = \{z \in \mathbb{C} \mid |z| = 1\}\).
+
+For \(x \in A\), there exists unique hermitian \(h, k \in A\) such that \(x = h + ik\). Indeed, 
+by observing if \(x = h + ik\) then \(x^* = h - ik\), it follows 
+\[h = \frac{x + x^*}{2}, k = \frac{x - x^*}{2i}.\]
+By checking, we see that this choice works. 
+Furthermore, we note that \(x\) is normal if and only if \(hk = kh\).
 
 \end{document}
 
