@@ -694,7 +694,7 @@ where \(\pi_{\gamma} : \prod_{\gamma \in \Gamma} X_{\gamma} \to X_{\gamma}\) is 
   by \(d\), \(f_n\) is \(\mathcal{T}_d\)-continuous and so \(\sigma(X, \mathcal{F}) \subseteq \mathcal{T}_d\). Conversely, 
   as each \(f_n\) is \(\sigma(X, \mathcal{F})\)-continuous, the map 
   \[(x, y) \mapsto d_n(f_n(x), f_n(y))\]
-  is also \(\sigma(X, \mathcal{F})\)-continuous. Hence, by the Weierstass-M-test, it follows \(d\) is also 
+  is also \(\sigma(X, \mathcal{F})\)-continuous. Hence, by the Weierstrass-M-test, it follows \(d\) is also 
   \(\sigma(X, \mathcal{F})\)-continuous implying 
   \[\mathcal{T}_d = \sigma(X, \mathcal{F})\]
   as required.
@@ -1175,7 +1175,7 @@ We introduce the notation
   \[r_A(x) \le \inf \|x^n\|^{1 / n} \le \liminf \|x^n\|^{1 / n} \le \limsup \|x^n\|^{1 / n} \le r_A(x).\] 
 \end{proof}
 
-\begin{theorem}
+\begin{theorem}\label{thm:spectrum_subalg}
   Let \(A\) be a unital Banach algebra and \(B\) a unital subalgebra of \(A\). Then, given \(x \in B\), 
   \[\sigma_B(x) \supseteq \sigma_A(x) \text{ and } \partial \sigma_B(x) \subseteq \partial \sigma_A(x).\]
   It follows that \(\sigma_B(x)\) is the union of \(\sigma_A(x)\) with some of the bounded components 
@@ -1294,7 +1294,7 @@ We introduce the notation \(\mathcal{M}_A\) for the set of all maximal ideals of
   \end{itemize}
 \end{proof}
 
-\begin{corollary}
+\begin{corollary}\label{cor:commut_radius}
   Let \(A\) be a Banach algebra and \(x, y \in A\) such that \(xy = yx\). Then, 
   \[r_A(x + y) \le r_A(x) + r_A(y) \text{ and } r_A(xy) \le r_A(x) r_A(y).\]
 \end{corollary}
@@ -1693,6 +1693,135 @@ by observing if \(x = h + ik\) then \(x^* = h - ik\), it follows
 \[h = \frac{x + x^*}{2}, k = \frac{x - x^*}{2i}.\]
 By checking, we see that this choice works. 
 Furthermore, we note that \(x\) is normal if and only if \(hk = kh\).
+
+We remark that, for \(x \in A\) unitary, \(x \in G(A)\) is and only if \(x^* \in G(A)\). So, 
+\[\sigma_A(x^*) = \{\overline\lambda \mid \lambda \in \sigma_A(x)\}\]
+and \(r_A(x) = r_A(x^*)\).
+
+\begin{lemma}
+ If \(x \in A\) is normal, then \(r_A(x) = \|x\|\). 
+\end{lemma}
+\begin{proof}
+  Firstly, we consider the case that \(x\) is hermitian. In this case, 
+  \(\|x^2\| = \|x^*x\| = \|x\|^2\). Thus, for all \(n \in \mathbb{N}\), \(\|x^{2n}\| = \|x\|^{2n}\) 
+  and by the spectral radius formula, 
+  \[r_A(x) = \lim_{n \to \infty} \|x^{2n}\|^{1 / 2n} = \|x\|\]
+  as required.
+  
+  Now, for any \(x \in A\), \((x^* x)^* = x^* (x^*)^* = x^* x\), i.e. \(x^*x\) is hermitian, we have 
+  that \(r_A(x^*x) = \|x^*x\| = \|x\|^2\). Hence, if \(x\) is normal,  
+  \[\|x\|^2 = r_A(x^*x) \le r_A(x^*)r_A(x) \le r_A(x)\|x\|\]
+  where \(r_A(x^*x) \le r_A(x^*)r_A(x)\) follows by corollary~\ref{cor:commut_radius}.
+  Thus, \(\|x\| \le r_A(x)\). However, as we already know that \(r_A(x) \le \|x\|\), we have the 
+  desired equality.
+\end{proof}
+
+\begin{lemma}
+  Assume \(A\) is unital, \(x \in A\) and \(\phi \in \Phi_A\). Then \(\phi(x^*) = \overline{\phi(x)}\).
+\end{lemma}
+\begin{proof}
+  It suffices to show that \(\phi(x) \in \mathbb{R}\) for any hermitian \(x\). Indeed, in this case, 
+  for any \(x \in A\), writing \(x = h + ik\) where \(h, k \in A\) are hermitian, we have 
+  \[\phi(x^*) = \phi(h - ik) = \phi(h) - i \phi(k) = \overline{\phi(h) + i\phi(k)} 
+    = \overline{\phi(h + ik)} = \overline{\phi(x)}.\]
+  Assume now \(x\) is hermitian and write \(\phi(x) = a + ib\) for some \(a, b \in \mathbb{R}\). Then, 
+  for all \(t \in \mathbb{R}\), by recalling that \(\|\phi\| = 1\),
+  \[a^2 + (b + t)^2 = |\phi(x + it1)|^2 \le \|x + it1\|^2 = \|(x + it)^*(x + it)\| = \|x^2 + t^2 1\| 
+  \le \|x^2\| + t^2.\]
+  Namely, \(a^2 + b^2 + 2bt \le \|x\|^2\) for all \(t\), which in turn implies \(b = 0\) as required. 
+\end{proof}
+
+The assumption that \(A\) is unital in the above is not necessary. However, in this case, unitization 
+is tricky as \(A_+\) might not satisfy the \(C^*\)-equation.
+
+\begin{corollary}
+  Let \(A\) be unital, then 
+  \begin{itemize}
+    \item if \(x \in A\) is hermitian, then \(\sigma_A(x) \subseteq \mathbb{R}\).
+    \item if \(x \in A\) is unitary, then \(\sigma_A(x) \subseteq \mathbb{T}\).
+    \item if \(B \subseteq A\) is a unital \(C^*\)-subalgebra of \(A\) and \(x \in B\) is normal, then 
+      \(\sigma_A(x) = \sigma_B(x)\).
+  \end{itemize}
+\end{corollary}
+\begin{proof}\(\)\\
+  \begin{itemize}
+    \item If \(x\) is hermitian, then for all \(\phi \in \Phi_A\), we have \(\phi(x) \in \mathbb{R}\) 
+      from above lemma. Thus, the result follows by recalling that \(\sigma_A(x) = \{\phi(x) \mid \phi \in \Phi_A\}\).
+    \item If \(x\) is unitary, then \(1 = \phi(1) = \phi(x^*x) = \phi(x^*)\phi(x) = \overline{\phi(x)}\phi(x) = |\phi(x)|^2\).
+    \item Firstly, let us consider the case where \(x\) is hermitian. In this case, we have by 
+    theorem~\ref{thm:spectrum_subalg} that 
+    \[\sigma_A(x) \subseteq \sigma_B(x) \text{ and } \partial \sigma_B(x) \subseteq \partial \sigma_A(x).\]
+    However, in this case, as \(x\) is hermitian, the spectrums are subsets of \(\mathbb{R}\) and hence do 
+    not have any holes. Thus, it follows \(\sigma_A(x) = \sigma_B(x)\).
+
+    Now, let us assume that \(x \in B\) is normal. Then, taking \(\lambda \in \mathbb{C}\), we have
+    \begin{align*}
+      \lambda 1 - x \in G(B) & \iff \lambda 1 - x, (\lambda 1 - x)^* \in G(B)\\
+      & \iff (\overline{\lambda} 1 - x^*)(\lambda 1 - x) \in G(B)\\
+      & \iff (\overline{\lambda} 1 - x^*)(\lambda 1 - x) \in G(A)\\
+      & \iff \lambda 1 - x \in G(A)
+    \end{align*}
+    where the third if and only if follows as \(x^* x\) is hermitian.
+
+    (Stronger statement for all \(x \in B\): Murphy, Gerard J. \(C^*\)-Algebras and Operator Theory. Theorem 2.1.11)  
+  \end{itemize}
+\end{proof}
+
+If \(H\) is a Hilbert space and \(T \in \mathcal{B}(H)\) is hermitian or unitary. By the above 
+corollary, we have 
+\[\sigma(T) = \partial \sigma(T) \subseteq \sigma_{ap}(T) \subseteq \sigma(T).\]
+Hence \(\sigma(T) = \sigma_{ap}(T)\) (where \(\sigma_{ap}(T)\) is the approximate point spectrum 
+of \(T\)).
+
+\begin{theorem}[Commutative Gelfand-Naimark theorem]
+  Let \(A\) be a commutative unital \(C^*\)-algebra. Then, there exists some compact Hausdorff 
+  \(K\) such that \(A\) is isometrically \(*\)-isomorphic to \(C(K)\). This isomorphism is 
+  precisely the Gelfand map \(x \mapsto \hat x\).
+\end{theorem}
+\begin{proof}
+  We know the Gelfand maps is a unital homomorphism and so, it suffices to show \((\hat x)^* = \widehat{(x^*)}\),
+  isometry and surjectivity.
+
+  Let \(x \in A\), then for all \(\phi \in \Phi_A\), \((\hat x)^*(\phi) = \overline{\phi(x)} = 
+  \phi(x^*) = \widehat{(x^*)}(\phi)\) as required.
+
+  \textit{Isometric}: We already know from the Gelfand representation theorem that \(\|\hat x\|_\infty 
+  = r_A(x)\). Now, since \(A\) is commutative, any \(x \in A\) is normal. Thus, it follows that 
+  \(r_A(x) = \|x\|\).
+
+  \textit{Surjectivity}: Since the Gelfand map is an isometric, unital \(*\)-homomorphism, its image 
+  is a closed, unital, \(*\)-subalgebra of \(C(K)\). It furthermore separates points since for all 
+  \(\phi \ne \psi \in \Phi_A\), there exists some \(x \in A\) such that \(\phi(x) \ne \psi(x)\). Thus, 
+  \(\hat x(\phi) \ne \hat x(\psi)\). Hence, by Stone-Weierstrass, it follows the image must be all 
+  of \(C(K)\).
+\end{proof}
+
+\begin{corollary}
+  Let \(A\) be a unital \(C^*\)-algebra. \(x \in A\) is said to be positive if \(x\) is hermitian and 
+  \(\sigma_A(x) \subseteq [0, \infty)\). A positive \(x \in A\) has a unique positive square root, i.e. 
+  there exists a unique positive \(y \in A\) such that \(y^2 = x\).  
+\end{corollary}
+\begin{proof}
+  \textit{Existence}: Let \(B = \langle x \rangle = \overline{\{p(x) \mid \text{polynomial } p\}}\).
+  Then clearly \(x \in B\) and \(\sigma_A(x) = \sigma_B(x) \subseteq [0, \infty)\). Consider the Gelfand 
+  map on \(B\) so that for all \(\phi \in \Phi_B\), \(\hat x(\phi) = \phi(x) \in \sigma_B(x) \subseteq [0, \infty)\).
+  Thus, we can define \(\hat y \in C(\Phi_B)\) such that \(\hat y(\phi) = \sqrt{\hat x(\phi)}\). Then, 
+  \(\hat y\) is a positive square root of \(\hat x\). Hence, by surjectivity, there exists some 
+  \(y \in A\) which is a positive square root of \(x\) as required.
+
+  \textit{Uniqueness}: Assume \(z \in A\) is another positive square root of \(x\). Then, 
+  \[zx = xz = z^3.\]
+  Thus, there exists a commutative \(*\)-subalgebra \(D\) of \(A\) such that \(x, z \in D\). Then, 
+  by considering the Gelfand map on \(D\), we have \(\hat y = \hat z\) implying \(y = z\).
+\end{proof}
+
+This corollary applies in the case that \(A = \mathcal{B}(H)\) for some Hilbert space \(H\). 
+In this case, \(T \in \mathcal{B}(H)\) is positive if and only if \(\langle Tx, x\rangle > 0\) 
+for all \(x \in H\). Then, in the case that \(T\) is invertible in \(\mathcal{B}(H)\), 
+there exists unique \(R, U \in \mathcal{B}(H)\)
+such that \(R\) is positive, \(U\) is unitary such that \(T = RU\). Indeed, since \(TT^*\) is 
+positive, we can take \(R = (TT^*)^{1 / 2}\) and \(U = R^{-1} T\). Then \(U\) is invertible 
+and \(UU^* = R^{-1} TT^* R^{-1} = R^{-1} R^2 R^{-1} = 1\) implying \(T = RU\).
 
 \end{document}
 
